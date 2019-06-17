@@ -46,18 +46,26 @@
                     $('#message').val('').focus();
                 });
             });
-            //------------------------------------
-            //$.connection.hub.invoke("Send", GroupChatId, displayname, message).catch(function (err) {
-            //    return console.error(err.toString());
+    //        ------------------------------------
+            //$.connection.hub.invoke("send", groupchatid, displayname, message).catch(function (err) {
+            //    return console.error(err.tostring());
 
-            var ChatHubProxy = $.connection.chatHub
-            ChatHubProxy.client.addNewMessageToPage = function (GroupChatId, name, message) {
-             // Add the message to the page. 
-             $('#message').append('<li><strong>' + htmlEncode(name)
-             + '</strong>: ' + htmlEncode(message) + '<li>');
+            var chatHubProxy = $.connection.chatHub;
+            chatHubProxy.client.addNewMessageToPage = function (message) {
+                console.log(message.Name + ' ' + message.Message);
+                // Add the message to the page. 
+    $('#discussion').append('<li><strong>' + htmlEncode(message.Name)
+        + '</strong>: ' + htmlEncode(message.Message) + '<li>');
             };
 
-            //-------------------------------
+    //        $.connection.hub.start()
+    //.done(function(){
+    // console.log('Now connected, connection ID=' + $.connection.hub.id);            
+    // })
+    //.fail(function(){ console.log('Could not Connect!'); });
+            
+
+    //        -------------------------------
         });
         
 

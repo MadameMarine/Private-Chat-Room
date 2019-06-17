@@ -6,10 +6,16 @@ namespace SignalRChat
 {
     public class ChatHub : Hub
     {
-        public async Task Send(string groupChatId, string name, string message) //ou void
+        public async Task Send(string name, string message) //ou void
         {
             // Call the addNewMessageToPage method to update clients.
-            await Clients.All.addNewMessageToPage(groupChatId, name, message);
+            await Clients.All.addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+        }
+
+        public class ChatMessage
+        {
+            public string Name { get; set;}
+            public string Message { get; set;}
         }
 
 
