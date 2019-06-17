@@ -1,7 +1,5 @@
 ﻿@{
     ViewBag.Title = "Chat";
-
-    var GroupChatId = Model.Id;
 }
 <h2>Chat</h2>
 <h1>Groupe Chat: @Model.Id</h1>
@@ -22,13 +20,18 @@
     <!--SignalR script to update the chat page and send messages.-->
     <script>
         $(function () {
-            // Reference the auto-generated proxy for the hub.
+            // Reference the auto-generated proxy for the hub.           
             var chat = $.connection.chatHub;
-            // Create a function that the hub can call back to display messages.
+
+            var GroupChatId = '@Model.Id'; //assignation ID de la Page Chat
+            
+
+            // Create a function that the hub can call back to display messages.         
             chat.client.addNewMessageToPage = function (name, message) {
                 // Add the message to the page.
                 $('#discussion').append('<li><strong>' + htmlEncode(name)
                     + '</strong>: ' + htmlEncode(message) + '</li>');
+                
             };
             // Get the user name and store it to prepend to messages.
             $('#displayname').val(prompt('Enter your name:', ''));
@@ -43,7 +46,21 @@
                     $('#message').val('').focus();
                 });
             });
+            //------------------------------------
+            //$.connection.hub.invoke("Send", GroupChatId, displayname, message).catch(function (err) {
+            //    return console.error(err.toString());
+
+            var ChatHubProxy = $.connection.chatHub
+            ChatHubProxy.client.addNewMessageToPage = function (GroupChatId, name, message) {
+             // Add the message to the page. 
+             $('#message').append('<li><strong>' + htmlEncode(name)
+             + '</strong>: ' + htmlEncode(message) + '<li>');
+            };
+
+            //-------------------------------
         });
+        
+
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
