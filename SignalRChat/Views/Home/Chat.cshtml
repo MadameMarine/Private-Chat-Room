@@ -1,10 +1,11 @@
 ﻿@{
     ViewBag.Title = "Chat";
 }
-<h2>Chat</h2>
-<h1>Groupe Chat: @Model.Id</h1>
+<h1>Chat</h1>
+<h2>Groupe Chat: @Model.Id</h2>
 
 <div class="container">
+    <input type="button" id="joinGroup" value="Join Private Group" />
     <input type="text" id="message" />
     <input type="button" id="sendmessage" value="Send" />
     <input type="hidden" id="displayname" />
@@ -20,54 +21,47 @@
     <!--SignalR script to update the chat page and send messages.-->
     <script>
         $(function () {
-            // Reference the auto-generated proxy for the hub.           
+
+            var userName = '';
+
+            // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
 
-            var GroupChatId = '@Model.Id'; //assignation ID de la Page Chat
-            
-
-            // Create a function that the hub can call back to display messages.         
-            chat.client.addNewMessageToPage = function (name, message) {
-                // Add the message to the page.
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
-                    + '</strong>: ' + htmlEncode(message) + '</li>');
-                
-            };
-            // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
-            // Set initial focus to message input box.
-            $('#message').focus();
-            // Start the connection.
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
+             $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
+                    chat.server.send('@Model.Id', userName, $('#message').val());
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
-                });
-            });
-    //        ------------------------------------
-            //$.connection.hub.invoke("send", groupchatid, displayname, message).catch(function (err) {
-            //    return console.error(err.tostring());
+             });
 
-            var chatHubProxy = $.connection.chatHub;
-            chatHubProxy.client.addNewMessageToPage = function (message) {
-                console.log(message.Name + ' ' + message.Message);
-                // Add the message to the page. 
-    $('#discussion').append('<li><strong>' + htmlEncode(message.Name)
-        + '</strong>: ' + htmlEncode(message.Message) + '<li>');
+
+            // Create a function that the hub can call back to display messages.
+            chat.client.addNewMessageToPage = function (message) {
+                console.log( message.Name + ' ' + message.Message);
+                $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '<li>');
             };
 
-    //        $.connection.hub.start()
-    //.done(function(){
-    // console.log('Now connected, connection ID=' + $.connection.hub.id);            
-    // })
-    //.fail(function(){ console.log('Could not Connect!'); });
-            
+            //go !
 
-    //        -------------------------------
+            // Get the user name and store it to prepend to messages.
+            userName = prompt('Enter your name:', '');
+
+            $('#displayname').val(userName);
+
+            console.log('Starting signalR connection...');
+            $.connection.hub.start().done(function () {
+                console.log('joining group @Model.Id...');
+                chat.server.joinGroup('@Model.Id').done(function () {
+                     console.log('group joined.');
+                     // Set initial focus to message input box.
+                    $('#message').focus();
+                });
+               
+            });
+
+           
         });
-        
+
 
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
