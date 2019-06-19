@@ -49,7 +49,7 @@
 
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (message) {
-                console.log( message.Name + ' ' + message.Message); //-> Doit changer message.name par valeur UserName?
+                console.log( message.Name + ' ' + message.Message); 
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
@@ -64,10 +64,7 @@
 
             //go!
 
-            //----> A supp quand code validé
-            //// Get the user name and store it to prepend to messages.
-            //userName = prompt('Enter your name:', '');
-            //$('#displayname').val(userName);
+            
 
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {

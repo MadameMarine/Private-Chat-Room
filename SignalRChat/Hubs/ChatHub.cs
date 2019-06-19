@@ -23,7 +23,6 @@ namespace SignalRChat
         public async Task JoinRoom(string GroupChatId)
         {
             await Groups.Add(Context.ConnectionId, GroupChatId);
-            //Clients.Group(GroupChatId).addChatMessage(Context.User.Identity.Name + " joined.");
         }
 
         //provisoire
@@ -43,32 +42,5 @@ namespace SignalRChat
         {
             await Clients.Group(GroupChatId).Send("addNewMessageToPage",name, message);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public Task JoinGroup(string group)
-        //{
-        //    return Groups.AddToGroupAsync(Context.ConnectionId, group);
-        //}
-
-        //public Task SendMessageToGroup(string group, string message)
-        //{
-        //    return Clients.Group(group).SendAsync("ReceiveMessage", message);
-        //}
-
-
-
     }
 }
