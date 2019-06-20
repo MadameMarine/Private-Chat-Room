@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace App1
     /// </summary>
     sealed partial class App : Application
     {
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,7 +32,36 @@ namespace App1
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            SignalR();
         }
+
+        private void SignalR()
+        {
+            //Connect to the url 
+            var MyHubConnection = new HubConnection("http://localhost:52527");
+            //ChatHub is the hub name defined in the host program. 
+            var MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
+
+            //Connect to hub
+            App myApp = (Application.Current as App);
+            if (myApp.MyHubConnection.State != ConnectionState.Connected)
+            {
+                try
+                {
+                    myApp.MyHubConnection.Start();
+                }
+                catch
+                {
+                    //textBox.Text = $"Can't connect to server {myApp.MyHubConnection.Url}";
+                    Console.WriteLine("Can't connect to server...");
+                    return;
+                }
+            }
+        }
+
+        public HubConnection MyHubConnection { get; set; }
+        public IHubProxy MyHubProxy { get; set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

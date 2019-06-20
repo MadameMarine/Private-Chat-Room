@@ -47,6 +47,9 @@
                     $('#message').val('').focus();
              });
 
+            //
+            //-----> A faire basculer dans le Mainpage.cs
+            //
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (message) {
                 console.log( message.Name + ' ' + message.Message); 
@@ -65,7 +68,6 @@
             //go!
 
             
-
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
                 console.log('joining group @Model.Id...');

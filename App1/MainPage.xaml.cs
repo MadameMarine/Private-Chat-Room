@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,20 +26,25 @@ namespace App1
         public MainPage()
         {
             this.InitializeComponent();
-            InitilizeHub();
         }
-
-        private void RichTextBlock_SelectionChanged(object sender, RoutedEventArgs e)
+       
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            TextBox textBox = new TextBox();
+            textBox.Text = string.Empty;
 
-        }
-
-        private async void InitilizeHub()
-        {
-            var hubConnection = new ChatHub(); //---WIP
-            //var hubProxy = hubConnection.CreateHubProxy("BroadcastHub");
-            //hubProxy.On<DateTime>("Broadcast",async data => await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => BroadcastResults.Text =data.ToString()));
-            await hubConnection.Start();
+            //Get informations from browser
+            App myApp = (Application.Current as App);
+            if (myApp.MyHubConnection.State == Microsoft.AspNet.SignalR.Client.ConnectionState.Connected)
+            {
+                //get username and message              
+                //textBox.Text = userName + ":" + message;
+            }
+            else
+            {
+                //textBox.Text = $"Can't connect to server {myApp.MyHubConnection.Url}";
+                Console.WriteLine("Can't connect to server...");
+            }
         }
     }
 }
