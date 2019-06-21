@@ -22,73 +22,62 @@ namespace App1
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
-    {   //A supprimer quand code validé-------------------------------
-        //private void SignalR()
-        //{
-        //    //Connect to the url 
-        //    var MyHubConnection = new HubConnection("http://localhost:52527/Home/Chat/Compositeur");
-        //    //ChatHub is the hub name defined in the host program
-        //    //proxy deals with the interaction with a specific hub
-        //    var MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
+    {
+        private HubConnection myHubConnection;
+        private IHubProxy myProxy;
 
-        //    //Connect to hub
-        //    App myApp = (Application.Current as App);            
-        //    if (myApp.MyHubConnection.State != ConnectionState.Connected)
-        //    {
-        //        try
-        //        {
-        //            myApp.MyHubConnection.Start();
-        //        }
-        //        catch
-        //        {
-        //            Console.WriteLine("Can't connect to server...");
-        //            return;
-        //        }
-        //    }
-        //}
-        //A supprimer quand code validé-------------------------------
-        public HubConnection MyHubConnection { get; set; }
-        public IHubProxy MyHubProxy { get; set; }
 
         //Départ!
         public MainPage()
         {
+            
             this.InitializeComponent();
-            //SignalR();
-            //Connect to hub
-            App myApp = (Application.Current as App);
-            if (myApp.MyHubConnection.State != ConnectionState.Connected)
-            {
-                try
-                {
-                    myApp.MyHubConnection.Start();
-                }
-                catch
-                {
-                    Console.WriteLine("Can't connect to server...");
-                    return;
-                }
-            }
+            this.Loaded += MainPage_Loaded;
+           
+        }
+
+        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            myHubConnection = new HubConnection("http://localhost:52527");
+            myProxy = myHubConnection.CreateHubProxy("chatHub");
+
+            
 
             //Get informations from browser
-            myApp.MyHubProxy.On("addNewMessageToPage", message => 
+            myProxy.On("addNewMessageToPage", message =>
             {
-                Console.WriteLine(message);
-                userTextbox.Text = message;
-
+                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    messages.Text += message.Username + ": " + message.Message;
+                });
             }); ;
         }
 
-      
-        private void JoinButton_Click(object sender, RoutedEventArgs e)
+        //public HubConnection MyHubConnection { get; set; }
+        //public IHubProxy MyHubProxy { get; set; }
+        private async void JoinButton_Click(object sender, RoutedEventArgs e)
         {
-            App myApp = (Application.Current as App);
+            userTextbox.IsEnabled = false;
+            joinButton.IsEnabled = false;
+
+            if (myHubConnection.State != ConnectionState.Connected)
+            {
+                Console.WriteLine("Compositeur is connecting to server...");
+                await myHubConnection.Start();
+
+            }
 
             //Join la room            
-            Console.WriteLine("Compositeur joining group Room1...");
-            myApp.MyHubProxy.Invoke("joinGroup", "Room1");
+            Console.WriteLine("Compositeur joining group Chat/Compositeur...");
+            await myProxy.Invoke("joinGroup", "Compositeur");
             Console.WriteLine("Compositeur group joined");
-            Frame.Navigate(typeof(Hub));
+
+            //TOTO : rendre visible une textbox pour envoyer un message
+
+            await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, "salut");
+           
+
+
         }
     }
 }

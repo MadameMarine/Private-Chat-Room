@@ -10,8 +10,9 @@
 
     <Grid>
         <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBox x:Name="userTextbox" HorizontalAlignment="Stretch" Header="User name" />
+            <TextBox x:Name="userTextbox" HorizontalAlignment="Stretch" Header="Username" />
             <Button x:Name="joinButton" Content="Join" Click="JoinButton_Click" />
+            <TextBlock x:Name="messages" />
         </StackPanel>
         
     </Grid>

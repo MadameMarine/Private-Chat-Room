@@ -31,15 +31,11 @@ namespace App1
         /// 
         #region SignalR 
 
-        public HubConnection MyHubConnection { get; set; }
-        public IHubProxy MyHubProxy { get; set; }
 
         private void SignalR()
         {
             //Connect to the url 
-            MyHubConnection = new HubConnection("http://localhost:52527/Home/Chat/Compositeur");
-            //ChatHub is the hub name defined in the host program. 
-            MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
+           
         }
 
         #endregion
