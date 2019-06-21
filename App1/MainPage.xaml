@@ -9,6 +9,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBox HorizontalAlignment="Left" Height="27" Margin="686,623,0,0" Text="Message" VerticalAlignment="Top" Width="79" TextChanged="TextBox_TextChanged" IsEnabled="True"/>
+        <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBox x:Name="userTextbox" HorizontalAlignment="Stretch" Header="User name" />
+            <Button x:Name="joinButton" Content="Join" Click="JoinButton_Click" />
+        </StackPanel>
+        
     </Grid>
 </Page>

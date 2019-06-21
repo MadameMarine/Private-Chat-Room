@@ -28,40 +28,29 @@ namespace App1
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public App()
-        {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+        /// 
+        #region SignalR 
 
-            SignalR();
-        }
+        public HubConnection MyHubConnection { get; set; }
+        public IHubProxy MyHubProxy { get; set; }
 
         private void SignalR()
         {
             //Connect to the url 
-            var MyHubConnection = new HubConnection("http://localhost:52527");
+            MyHubConnection = new HubConnection("http://localhost:52527/Home/Chat/Compositeur");
             //ChatHub is the hub name defined in the host program. 
-            var MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
-
-            //Connect to hub
-            App myApp = (Application.Current as App);
-            if (myApp.MyHubConnection.State != ConnectionState.Connected)
-            {
-                try
-                {
-                    myApp.MyHubConnection.Start();
-                }
-                catch
-                {
-                    //textBox.Text = $"Can't connect to server {myApp.MyHubConnection.Url}";
-                    Console.WriteLine("Can't connect to server...");
-                    return;
-                }
-            }
+            MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
         }
 
-        public HubConnection MyHubConnection { get; set; }
-        public IHubProxy MyHubProxy { get; set; }
+        #endregion
+        public App()
+        {
+
+            this.InitializeComponent();
+            this.Suspending += OnSuspending;
+            SignalR();
+        }
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

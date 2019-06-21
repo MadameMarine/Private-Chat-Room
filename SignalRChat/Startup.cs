@@ -13,7 +13,7 @@ namespace SignalRChat
 
             //En attente pour l'instant
             //The hubConfiguration bit is only needed if I want to change the default settings
-            var hubConfiguration = new HubConfiguration;
+            var hubConfiguration = new HubConfiguration();
             //{
             //    EnableDetailedErrors = true,
             //    EnableJavaScriptProxies = false

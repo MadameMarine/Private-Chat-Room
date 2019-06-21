@@ -25,7 +25,6 @@ namespace SignalRChat
             await Groups.Add(Context.ConnectionId, GroupChatId);
         }
 
-        //provisoire
         public void JoinGroup(string GroupChatId)
         {
             this.Groups.Add(this.Context.ConnectionId, GroupChatId);

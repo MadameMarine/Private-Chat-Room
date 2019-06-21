@@ -22,29 +22,73 @@ namespace App1
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
-    {
+    {   //A supprimer quand code validé-------------------------------
+        //private void SignalR()
+        //{
+        //    //Connect to the url 
+        //    var MyHubConnection = new HubConnection("http://localhost:52527/Home/Chat/Compositeur");
+        //    //ChatHub is the hub name defined in the host program
+        //    //proxy deals with the interaction with a specific hub
+        //    var MyHubProxy = MyHubConnection.CreateHubProxy("ChatHub");
+
+        //    //Connect to hub
+        //    App myApp = (Application.Current as App);            
+        //    if (myApp.MyHubConnection.State != ConnectionState.Connected)
+        //    {
+        //        try
+        //        {
+        //            myApp.MyHubConnection.Start();
+        //        }
+        //        catch
+        //        {
+        //            Console.WriteLine("Can't connect to server...");
+        //            return;
+        //        }
+        //    }
+        //}
+        //A supprimer quand code validé-------------------------------
+        public HubConnection MyHubConnection { get; set; }
+        public IHubProxy MyHubProxy { get; set; }
+
+        //Départ!
         public MainPage()
         {
             this.InitializeComponent();
-        }
-       
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = new TextBox();
-            textBox.Text = string.Empty;
+            //SignalR();
+            //Connect to hub
+            App myApp = (Application.Current as App);
+            if (myApp.MyHubConnection.State != ConnectionState.Connected)
+            {
+                try
+                {
+                    myApp.MyHubConnection.Start();
+                }
+                catch
+                {
+                    Console.WriteLine("Can't connect to server...");
+                    return;
+                }
+            }
 
             //Get informations from browser
+            myApp.MyHubProxy.On("addNewMessageToPage", message => 
+            {
+                Console.WriteLine(message);
+                userTextbox.Text = message;
+
+            }); ;
+        }
+
+      
+        private void JoinButton_Click(object sender, RoutedEventArgs e)
+        {
             App myApp = (Application.Current as App);
-            if (myApp.MyHubConnection.State == Microsoft.AspNet.SignalR.Client.ConnectionState.Connected)
-            {
-                //get username and message              
-                //textBox.Text = userName + ":" + message;
-            }
-            else
-            {
-                //textBox.Text = $"Can't connect to server {myApp.MyHubConnection.Url}";
-                Console.WriteLine("Can't connect to server...");
-            }
+
+            //Join la room            
+            Console.WriteLine("Compositeur joining group Room1...");
+            myApp.MyHubProxy.Invoke("joinGroup", "Room1");
+            Console.WriteLine("Compositeur group joined");
+            Frame.Navigate(typeof(Hub));
         }
     }
 }
