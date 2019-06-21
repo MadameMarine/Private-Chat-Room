@@ -12,8 +12,11 @@
         <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBox x:Name="userTextbox" HorizontalAlignment="Stretch" Header="Username" />
             <Button x:Name="joinButton" Content="Join" Click="JoinButton_Click" />
-            <TextBlock x:Name="messages" />
+            <TextBox x:Name="messageTextBox" HorizontalAlignment="Stretch" IsEnabled="False"/>
+            <Button x:Name="envoyerButton" Content="Send" VerticalAlignment="Top" Click="Button_Click" IsEnabled="False"/>
+            
+            <TextBox x:Name="messages" HorizontalAlignment="Stretch" IsEnabled="False" />
         </StackPanel>
-        
+
     </Grid>
 </Page>
