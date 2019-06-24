@@ -84,5 +84,10 @@ namespace App1
             //TODO : rendre visible une textbox pour envoyer un message
             await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
         }
+
+        private void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
