@@ -6,19 +6,23 @@ namespace SignalRChat
 {
     public class ChatHub : Hub
     {
+
+        public class ChatMessage
+        {
+            public string GroupChatId { get; set; }
+            public string Name { get; set; }
+            public string Message { get; set; }
+       
+        }
+
+
         public async Task Send(string groupId, string name, string message)
         {
             // Call the addNewMessageToPage method to update clients.
             await Clients.Group(groupId).addNewMessageToPage(new ChatMessage() {Name = name, Message = message });
         }
 
-        public class ChatMessage
-        {
-           public string GroupChatId { get; set; }
-            public string Name { get; set;}
-            public string Message { get; set;}
-        }
-
+     
         //ajoute utilisateur dans un groupe
         public async Task JoinRoom(string GroupChatId)
         {

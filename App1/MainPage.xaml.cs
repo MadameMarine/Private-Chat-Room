@@ -26,7 +26,6 @@ namespace App1
         private HubConnection myHubConnection;
         private IHubProxy myProxy;
 
-
         //Départ!
         public MainPage()
         {
@@ -36,13 +35,10 @@ namespace App1
            
         }
 
-        //private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             myHubConnection = new HubConnection("http://localhost:52527");
             myProxy = myHubConnection.CreateHubProxy("chatHub");
-
-
 
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
@@ -53,27 +49,34 @@ namespace App1
                     messages.Text += message.Name + ": " + message.Message;
 
                 });
-            }); ;
+            });
+
+          
         }
 
-        //public HubConnection MyHubConnection { get; set; }
-        //public IHubProxy MyHubProxy { get; set; }
+ 
         private async void JoinButton_Click(object sender, RoutedEventArgs e)
         {
             userTextbox.IsEnabled = false;
-            joinButton.IsEnabled = false;
             messageTextBox.IsEnabled = true;
             envoyerButton.IsEnabled = true;
+
+
+
 
             if (myHubConnection.State != ConnectionState.Connected)
             {
                 Console.WriteLine("Compositeur is connecting to server...");
                 await myHubConnection.Start();
-                
+
             }
 
+
+
             //Join la room            
-            Console.WriteLine("Compositeur joining group Chat/Compositeur...");
+            Console.WriteLine("Compositeur joining group du compositeur...");
+
+            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
             await myProxy.Invoke("joinGroup", "Compositeur");
             Console.WriteLine("Compositeur group joined");         
 
@@ -81,13 +84,10 @@ namespace App1
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            //TODO : rendre visible une textbox pour envoyer un message
+            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
             await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
         }
 
-        private void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
