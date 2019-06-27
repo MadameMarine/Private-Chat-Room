@@ -39,7 +39,6 @@ namespace SignalRChat.Controllers
             return View(new ChatEditViewModel() { Id = id});
         }
 
-        //---------------WIP----------------------------------------
         [HttpGet]
         public JsonResult CreateSession()
         {
@@ -48,9 +47,8 @@ namespace SignalRChat.Controllers
                 publicUrl = "http://localhost:52527/Home/Chat/Compositeur1234"
             };
 
-            return Json(res);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        //---------------WIP----------------------------------------
     }
 }

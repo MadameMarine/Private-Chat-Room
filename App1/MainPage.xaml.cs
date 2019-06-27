@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,8 +28,8 @@ namespace App1
     {
         private HubConnection myHubConnection;
         private IHubProxy myProxy;
-        HttpClient httpClient;
-        private string idUrl;
+        HttpClient httpClient = new HttpClient();
+        private string baseUrl = "http://localhost:52527";
 
         //Départ!
         public MainPage()
@@ -40,7 +42,7 @@ namespace App1
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            myHubConnection = new HubConnection("http://localhost:52527");
+            myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
             //Get informations from browser
@@ -90,14 +92,25 @@ namespace App1
             //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
             await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
         }
-
-        private void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
+        public class CreateSessionResult
         {
-            httpClient = new HttpClient();
-            idUrl = httpClient.Get;
+            public string publicUrl { get; set; }
+        }
+        private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");
+
+            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
+            //string checkResult = JsonConvert.DeserializeObject<Class>(res);
 
 
+            Console.WriteLine(checkResult);
+           
+            TextUrl.Text = checkResult.publicUrl;
             joinButton.IsEnabled = true;
         }
+
+        
     }
 }

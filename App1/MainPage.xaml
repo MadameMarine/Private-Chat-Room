@@ -19,7 +19,7 @@
         </StackPanel>
         <Button x:Name="ButtonAskConnection" Content="..." Margin="28,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.742,-1.125" Click="ButtonAskConnection_Click"/>
         <TextBox HorizontalAlignment="Left" Margin="78,20,0,0" Text="Ouvrir une session collaborative" VerticalAlignment="Top" Width="216" IsEnabled="False"/>
-        <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="28,85,0,0" Text="" VerticalAlignment="Top" Width="266" IsEnabled="False"/>
+        <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="28,85,0,0" Text="" VerticalAlignment="Top" Width="396" IsEnabled="False"/>
 
     </Grid>
 </Page>
