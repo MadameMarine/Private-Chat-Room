@@ -40,9 +40,17 @@ namespace SignalRChat.Controllers
         }
 
         //---------------WIP----------------------------------------
-        public ActionResult CreateSession()
+        [HttpGet]
+        public JsonResult CreateSession()
         {
-            return Json("http://localhost:52527/Home/Chat/Compositeur1234", JsonRequestBehavior.AllowGet);
+            var res = new
+            {
+                publicUrl = "http://localhost:52527/Home/Chat/Compositeur1234"
+            };
+
+            return Json(res);
         }
+
+        //---------------WIP----------------------------------------
     }
 }

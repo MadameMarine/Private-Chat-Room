@@ -11,13 +11,13 @@
     <Grid>
         <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBox x:Name="userTextbox" HorizontalAlignment="Stretch" Header="Username" />
-            <Button x:Name="joinButton" Content="Join" Click="JoinButton_Click"/>
+            <Button x:Name="joinButton" Content="Join" Click="JoinButton_Click" IsEnabled="False"/>
             <TextBox x:Name="messageTextBox" HorizontalAlignment="Stretch" IsEnabled="False"/>
             <Button x:Name="envoyerButton" Content="Send" VerticalAlignment="Top" Click="Button_Click" IsEnabled="False"/>
 
             <TextBox x:Name="messages" HorizontalAlignment="Stretch" IsEnabled="False" />
         </StackPanel>
-        <Button x:Name="ButtonAskConnection" Content="..." Margin="28,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.742,-1.125"/>
+        <Button x:Name="ButtonAskConnection" Content="..." Margin="28,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.742,-1.125" Click="ButtonAskConnection_Click"/>
         <TextBox HorizontalAlignment="Left" Margin="78,20,0,0" Text="Ouvrir une session collaborative" VerticalAlignment="Top" Width="216" IsEnabled="False"/>
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="28,85,0,0" Text="" VerticalAlignment="Top" Width="266" IsEnabled="False"/>
 

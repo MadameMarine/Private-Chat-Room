@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -25,6 +26,8 @@ namespace App1
     {
         private HubConnection myHubConnection;
         private IHubProxy myProxy;
+        HttpClient httpClient;
+        private string idUrl;
 
         //Départ!
         public MainPage()
@@ -88,6 +91,13 @@ namespace App1
             await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
         }
 
-        
+        private void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
+        {
+            httpClient = new HttpClient();
+            idUrl = httpClient.Get;
+
+
+            joinButton.IsEnabled = true;
+        }
     }
 }
