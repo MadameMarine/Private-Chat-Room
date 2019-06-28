@@ -92,15 +92,17 @@ namespace App1
         public class CreateSessionResult
         {
             public string publicUrl { get; set; }
+            public string groupId { get; set; }
         }
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
             
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");           
             var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
-            Console.WriteLine(checkResult);         
+            Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;
 
+   
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
@@ -111,8 +113,8 @@ namespace App1
 
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
-            await myProxy.Invoke("joinGroup", "Compositeur");
-            await myProxy.Invoke("Send", "Compositeur", idMaextro_, "connected");
+            await myProxy.Invoke("joinGroup", checkResult.groupId);
+            await myProxy.Invoke("Send", checkResult.groupId, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 
         }

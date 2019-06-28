@@ -42,9 +42,12 @@ namespace SignalRChat.Controllers
         [HttpGet]
         public JsonResult CreateSession()
         {
+            var generatedGroupId = "Compositeur";
+
             var res = new
             {
-                publicUrl = "http://localhost:52527/Home/Chat/Compositeur"
+                publicUrl = "http://localhost:52527/Home/Chat/"+ generatedGroupId,
+                groupId = generatedGroupId
             };
 
             return Json(res, JsonRequestBehavior.AllowGet);
