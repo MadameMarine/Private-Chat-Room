@@ -44,7 +44,7 @@ namespace SignalRChat.Controllers
         {
             var res = new
             {
-                publicUrl = "http://localhost:52527/Home/Chat/Compositeur1234"
+                publicUrl = "http://localhost:52527/Home/Chat/Compositeur"
             };
 
             return Json(res, JsonRequestBehavior.AllowGet);

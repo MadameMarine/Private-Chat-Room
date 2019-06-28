@@ -30,6 +30,7 @@ namespace App1
         private IHubProxy myProxy;
         HttpClient httpClient = new HttpClient();
         private string baseUrl = "http://localhost:52527";
+        private string idMaextro_ = "Maextro_";
 
         //Départ!
         public MainPage()
@@ -45,6 +46,7 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
+
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
             {
@@ -55,43 +57,38 @@ namespace App1
 
                 });
             });
-
-          
+           
         }
 
- 
-        private async void JoinButton_Click(object sender, RoutedEventArgs e)
-        {
-            userTextbox.IsEnabled = false;
-            messageTextBox.IsEnabled = true;
-            envoyerButton.IsEnabled = true;
+
+        //private async void JoinButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    userTextbox.IsEnabled = false;
+        //    messageTextBox.IsEnabled = true;
+        //    envoyerButton.IsEnabled = true;
 
 
 
 
-            if (myHubConnection.State != ConnectionState.Connected)
-            {
-                Console.WriteLine("Compositeur is connecting to server...");
-                await myHubConnection.Start();
+        //    if (myHubConnection.State != ConnectionState.Connected)
+        //    {
+        //        Console.WriteLine("Compositeur is connecting to server...");
+        //        await myHubConnection.Start();
 
-            }
+        //    }
 
+        //    //Join la room            
+        //    Console.WriteLine("Compositeur joining group du compositeur...");
 
+        //    await myProxy.Invoke("joinGroup", "Compositeur");
+        //    Console.WriteLine("Compositeur group joined");         
 
-            //Join la room            
-            Console.WriteLine("Compositeur joining group du compositeur...");
+        //}
 
-            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
-            await myProxy.Invoke("joinGroup", "Compositeur");
-            Console.WriteLine("Compositeur group joined");         
-
-        }
-
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
-            await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
-        }
+        //private async void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
+        //}
         public class CreateSessionResult
         {
             public string publicUrl { get; set; }
@@ -100,17 +97,26 @@ namespace App1
         {
             
             var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");
-
             var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
-            //string checkResult = JsonConvert.DeserializeObject<Class>(res);
-
-
-            Console.WriteLine(checkResult);
-           
+            Console.WriteLine(checkResult);         
             TextUrl.Text = checkResult.publicUrl;
-            joinButton.IsEnabled = true;
+
+            //Connection au ChatHub
+            if (myHubConnection.State != ConnectionState.Connected)
+            {
+                Console.WriteLine(idMaextro_ + " is connecting to server...");
+                await myHubConnection.Start(); //error ici, ne peut pas me co.
+
+            }
+
+            //Join la room            
+            Console.WriteLine(idMaextro_ + "joining group du compositeur...");
+            await myProxy.Invoke("joinGroup", "Compositeur");
+            await myProxy.Invoke("Send", "Compositeur", idMaextro_, "connected");
+            Console.WriteLine(idMaextro_ + "group joined");
+
         }
 
-        
+
     }
 }

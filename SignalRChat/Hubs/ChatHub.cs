@@ -24,7 +24,7 @@ namespace SignalRChat
 
      
         //ajoute utilisateur dans un groupe
-        public async Task JoinRoom(string GroupChatId)
+        public async Task JoinRoom(string GroupChatId) 
         {
             await Groups.Add(Context.ConnectionId, GroupChatId);
         }
