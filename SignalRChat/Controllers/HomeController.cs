@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +10,7 @@ namespace SignalRChat.Controllers
 {
     public class HomeController : Controller
     {
+       
         public ActionResult Index()
         {
             return View();
@@ -39,10 +42,12 @@ namespace SignalRChat.Controllers
             return View(new ChatEditViewModel() { Id = id});
         }
 
+
+
         [HttpGet]
-        public JsonResult CreateSession()
-        {
-            var generatedGroupId = "Compositeur";
+        public JsonResult CreateSession(string id)
+        {           
+            var generatedGroupId = id;
 
             var res = new
             {

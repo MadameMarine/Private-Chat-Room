@@ -31,6 +31,9 @@ namespace App1
         HttpClient httpClient = new HttpClient();
         private string baseUrl = "http://localhost:52527";
         private string idMaextro_ = "Maextro_";
+        //@idUnivers: nom de l'univers
+        public string idUnivers = "Medecine";
+
 
         //Départ!
         public MainPage()
@@ -46,7 +49,7 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
-
+          
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
             {
@@ -60,35 +63,6 @@ namespace App1
            
         }
 
-
-        //private async void JoinButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    userTextbox.IsEnabled = false;
-        //    messageTextBox.IsEnabled = true;
-        //    envoyerButton.IsEnabled = true;
-
-
-
-
-        //    if (myHubConnection.State != ConnectionState.Connected)
-        //    {
-        //        Console.WriteLine("Compositeur is connecting to server...");
-        //        await myHubConnection.Start();
-
-        //    }
-
-        //    //Join la room            
-        //    Console.WriteLine("Compositeur joining group du compositeur...");
-
-        //    await myProxy.Invoke("joinGroup", "Compositeur");
-        //    Console.WriteLine("Compositeur group joined");         
-
-        //}
-
-        //private async void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
-        //}
         public class CreateSessionResult
         {
             public string publicUrl { get; set; }
@@ -96,13 +70,7 @@ namespace App1
         }
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
-            
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");           
-            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
-            Console.WriteLine("url : " + checkResult);
-            TextUrl.Text = checkResult.publicUrl;
 
-   
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
@@ -111,9 +79,14 @@ namespace App1
 
             }
 
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idUnivers);           
+            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
+            Console.WriteLine("url : " + checkResult);
+            TextUrl.Text = checkResult.publicUrl;
+           
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
-            await myProxy.Invoke("joinGroup", checkResult.groupId);
+            await myProxy.Invoke("joinGroup", checkResult.groupId);            
             await myProxy.Invoke("Send", checkResult.groupId, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 
