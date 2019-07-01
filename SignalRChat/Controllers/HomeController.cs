@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client;
+using SignalRChat.url_friendly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,9 +47,9 @@ namespace SignalRChat.Controllers
 
         [HttpGet]
         public JsonResult CreateSession(string id)
-        {           
-            var generatedGroupId = id;
-
+        {
+            var generatedGroupId = StringHelper.URLFriendly(id);
+           
             var res = new
             {
                 publicUrl = "http://localhost:52527/Home/Chat/"+ generatedGroupId,

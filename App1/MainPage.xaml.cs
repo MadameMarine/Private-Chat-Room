@@ -32,7 +32,7 @@ namespace App1
         private string baseUrl = "http://localhost:52527";
         private string idMaextro_ = "Maextro_";
         //@idUnivers: nom de l'univers
-        public string idUnivers = "Medecine";
+        private string idUnivers = "Super à  voitze";
 
 
         //Départ!
@@ -75,7 +75,7 @@ namespace App1
             if (myHubConnection.State != ConnectionState.Connected)
             {
                 Console.WriteLine(idMaextro_ + " is connecting to server...");
-                await myHubConnection.Start(); //error ici, ne peut pas me co.
+                await myHubConnection.Start(); 
 
             }
 
