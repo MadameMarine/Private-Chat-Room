@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -32,7 +33,7 @@ namespace App1
         private string baseUrl = "http://localhost:52527";
         private string idMaextro_ = "Maextro_";
         //@idUnivers: nom de l'univers
-        private string idUnivers = "Super à  voitze";
+        private string idUnivers = "Super à& voitze";
 
 
         //Départ!
@@ -79,7 +80,9 @@ namespace App1
 
             }
 
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idUnivers);           
+            var urlbof = Uri.EscapeDataString(idUnivers);
+            var urlgood = Regex.Replace(urlbof,@"%","");;
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + urlgood); //nb : n'aime pas les %    
             var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
             Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;

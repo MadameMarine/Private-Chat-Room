@@ -4,6 +4,7 @@ using SignalRChat.url_friendly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,7 +49,10 @@ namespace SignalRChat.Controllers
         [HttpGet]
         public JsonResult CreateSession(string id)
         {
-            var generatedGroupId = StringHelper.URLFriendly(id);
+            var idStringHelper = StringHelper.URLFriendly(id);
+            var idFriendly = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
+            var generatedGroupId = idFriendly;
+            
            
             var res = new
             {
