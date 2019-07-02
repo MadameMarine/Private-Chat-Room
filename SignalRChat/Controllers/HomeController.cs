@@ -50,7 +50,8 @@ namespace SignalRChat.Controllers
         public JsonResult CreateSession(string id)
         {
             var idStringHelper = StringHelper.URLFriendly(id);
-            var idFriendly = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
+            var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
+            var idFriendly = Regex.Replace(idFriend, @"-", "");
             var generatedGroupId = idFriendly;
             
            
