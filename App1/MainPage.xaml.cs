@@ -79,10 +79,10 @@ namespace App1
                 await myHubConnection.Start(); 
 
             }
-
-            var urlbof = Uri.EscapeDataString(idUnivers);
-            var urlgood = Regex.Replace(urlbof,@"%","");;
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + urlgood); //nb : n'aime pas les %    
+            var url = Regex.Replace(idUnivers, @"&", ""); ;
+            var urlgood = Uri.EscapeDataString(url);
+            
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + urlgood);     
             var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
             Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;
