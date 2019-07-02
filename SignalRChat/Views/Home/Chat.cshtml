@@ -6,6 +6,9 @@
 
 <div class="container">
     <div class="col-lg-6">
+        @*provisoire*@
+        <ul id="idUrl"></ul>
+        @*provisoire*@
         <label for="TextUser">User..........</label>
         <input type="text" id="userName" />
         <input type="button" id="joinGroup" value="Join Private Group" />
@@ -39,6 +42,7 @@
             var userName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
+            var idUrl = '';
 
              $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
@@ -63,6 +67,7 @@
                  });
             });
 
+                        
             //go!
 
             
@@ -73,6 +78,10 @@
                      console.log('group joined.');
                      // Set initial focus to message input box.
                     $('#message').focus();
+
+                   
+
+
                 });
 
             });

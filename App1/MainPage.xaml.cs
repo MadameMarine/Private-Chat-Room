@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,7 +28,8 @@ namespace App1
     {
         private HubConnection myHubConnection;
         private IHubProxy myProxy;
-
+        HttpClient httpClient = new HttpClient();
+        private string baseUrl = "http://localhost:52527";
 
         //Départ!
         public MainPage()
@@ -36,13 +40,10 @@ namespace App1
            
         }
 
-        //private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            myHubConnection = new HubConnection("http://localhost:52527");
+            myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
-
-
 
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
@@ -53,27 +54,34 @@ namespace App1
                     messages.Text += message.Name + ": " + message.Message;
 
                 });
-            }); ;
+            });
+
+          
         }
 
-        //public HubConnection MyHubConnection { get; set; }
-        //public IHubProxy MyHubProxy { get; set; }
+ 
         private async void JoinButton_Click(object sender, RoutedEventArgs e)
         {
             userTextbox.IsEnabled = false;
-            joinButton.IsEnabled = false;
             messageTextBox.IsEnabled = true;
             envoyerButton.IsEnabled = true;
+
+
+
 
             if (myHubConnection.State != ConnectionState.Connected)
             {
                 Console.WriteLine("Compositeur is connecting to server...");
                 await myHubConnection.Start();
-                
+
             }
 
+
+
             //Join la room            
-            Console.WriteLine("Compositeur joining group Chat/Compositeur...");
+            Console.WriteLine("Compositeur joining group du compositeur...");
+
+            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
             await myProxy.Invoke("joinGroup", "Compositeur");
             Console.WriteLine("Compositeur group joined");         
 
@@ -81,8 +89,28 @@ namespace App1
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            //TODO : rendre visible une textbox pour envoyer un message
+            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
             await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
         }
+        public class CreateSessionResult
+        {
+            public string publicUrl { get; set; }
+        }
+        private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");
+
+            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
+            //string checkResult = JsonConvert.DeserializeObject<Class>(res);
+
+
+            Console.WriteLine(checkResult);
+           
+            TextUrl.Text = checkResult.publicUrl;
+            joinButton.IsEnabled = true;
+        }
+
+        
     }
 }

@@ -38,5 +38,17 @@ namespace SignalRChat.Controllers
         {
             return View(new ChatEditViewModel() { Id = id});
         }
+
+        [HttpGet]
+        public JsonResult CreateSession()
+        {
+            var res = new
+            {
+                publicUrl = "http://localhost:52527/Home/Chat/Compositeur1234"
+            };
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
