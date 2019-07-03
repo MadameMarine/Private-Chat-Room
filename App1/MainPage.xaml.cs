@@ -35,20 +35,14 @@ namespace App1
         //@idUnivers: nom de l'univers
         private string idUnivers = "Super &@#voitze";
 
-        
-
+       
         //Départ!
         public MainPage()
         {
             
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
-
-            //id maestro unique---
-            var ticks = DateTime.Now.ToString("HH:mm:ss").ToString();
-            var rng = new Random();
-            var idMaextro_Unique = idMaextro_ + Regex.Replace(ticks, @":","") + rng.Next(10).ToString() + rng.Next(10).ToString() + rng.Next(10).ToString();
-            //--------WIP-----------
+          
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -77,7 +71,6 @@ namespace App1
         }
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
-
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
@@ -85,18 +78,16 @@ namespace App1
                 await myHubConnection.Start(); 
 
             }
+
+            //Create unique id url
             var url = Regex.Replace(idUnivers, @"&", ""); ;
-            var urlgood = Uri.EscapeDataString(url);
-            
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + urlgood);     
-            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
-
-            //idUnivers unique---CAS 2 si je me trompe id
-            var ticks = DateTime.Now.ToString("HH:mm:ss").ToString();
+            var urlGood = Uri.EscapeDataString(url);
             var rng = new Random();
-            var idUniversUnique = checkResult.groupId + Regex.Replace(ticks, @":", "") + rng.Next(10).ToString() + rng.Next(10).ToString() + rng.Next(10).ToString();
-            //--------WIP-------------------------------
+            var idGoodUnique = urlGood + rng.Next(10,99).ToString() + rng.Next(10,99).ToString();
 
+            //Create Session
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);     
+            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);            
             Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;
            
