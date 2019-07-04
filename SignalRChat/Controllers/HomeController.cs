@@ -44,7 +44,7 @@ namespace SignalRChat.Controllers
             return View(new ChatEditViewModel() { Id = id});
         }
 
-
+        #region ActionControllers
 
         [HttpGet]
         public JsonResult CreateSession(string id)
@@ -63,6 +63,19 @@ namespace SignalRChat.Controllers
 
             return Json(res, JsonRequestBehavior.AllowGet);
         }
+
+        //Standby , je vais vers SignalR.
+        //[HttpGet]
+        //public JsonResult TakingNotes(bool boolean)
+        //{
+        //    var res = new
+        //    {
+        //        myBoolean = boolean
+        //    };
+        //    return Json(res, JsonRequestBehavior.AllowGet);
+        //}
+
+        #endregion
 
     }
 }

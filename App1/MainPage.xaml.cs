@@ -33,9 +33,9 @@ namespace App1
         private string baseUrl = "http://localhost:52527";
         private string idMaextro_ = "Maextro_";
         //@idUnivers: nom de l'univers
-        private string idUnivers = "Super &@#voitze";
+        private string idUnivers = "Monde";
+        GetIdGoodUnique stockIdGoodUnique = new GetIdGoodUnique();
 
-       
         //Départ!
         public MainPage()
         {
@@ -64,6 +64,11 @@ namespace App1
            
         }
 
+        public  class GetIdGoodUnique
+        {
+            public string IdGoodUnique { get; set; }
+        }
+
         public class CreateSessionResult
         {
             public string publicUrl { get; set; }
@@ -83,22 +88,53 @@ namespace App1
             var url = Regex.Replace(idUnivers, @"&", ""); ;
             var urlGood = Uri.EscapeDataString(url);
             var rng = new Random();
-            var idGoodUnique = urlGood + rng.Next(10,99).ToString() + rng.Next(10,99).ToString();
+            var idGoodUnique = urlGood + rng.Next(10, 99).ToString() + rng.Next(10, 99).ToString();           
 
             //Create Session
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);     
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);    
             var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);            
             Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;
-           
+            stockIdGoodUnique.IdGoodUnique = checkResult.groupId;
+
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
             await myProxy.Invoke("joinGroup", checkResult.groupId);            
             await myProxy.Invoke("Send", checkResult.groupId, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 
+            ButtonPriseDeNotes.IsEnabled = true;
         }
 
+        //en Stangby
+        //public class TakingNotesResult
+        //{
+        //    public string myBoolean { get; set; }
+            
+        //}
 
+        private  async void ButtonPriseDeNotes_Click(object sender, RoutedEventArgs e)
+        {
+            bool boolean = true;
+            //--------------WIP---------------
+            //Connection au ChatHub
+            if (myHubConnection.State != ConnectionState.Connected)
+            {
+                Console.WriteLine(idMaextro_ + " is connecting to server...");
+                await myHubConnection.Start();
+            }
+
+            string groupId = stockIdGoodUnique.IdGoodUnique;
+            await myProxy.Invoke("autorizeTakingNotes", groupId, boolean);
+
+            //--------------WIP---------------
+
+            //var res = await httpClient.GetStringAsync("/Home/TakingNotes/"+ boolean);
+
+            ////pour vérifier si mon JsonResult retourne la bonne valeur
+            //var checkResult = JsonConvert.DeserializeObject<TakingNotesResult>(res);
+            //Console.WriteLine(checkResult);
+
+        }
     }
 }
