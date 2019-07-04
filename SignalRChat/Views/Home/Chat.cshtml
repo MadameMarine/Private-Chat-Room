@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Chat";
+    var myTakingNotes = "null";
 }
 <h1>Chat</h1>
 <h2>Groupe Chat: @Model.Id</h2>
@@ -39,7 +40,6 @@
     <!--SignalR script to update the chat page and send messages.-->
     <script>
         $(function () {
-            
             var userName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
@@ -59,33 +59,35 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-                    //--------------WIP---------------
+             //----WIP---------------
+            //get string = myTakingNotes from UWP
+                chat.client.autorizeTakingNotes = function (notes) {
+                    console.log('myTakingNotes = ' + notes.Notes);
+                    var res = htmlEncode(notes.Notes)
+                    @myTakingNotes = res; @*IMPOSSIBLE*@                    
+                }
+            //----WIP---------------
+
+
+            //--------------WIP---------------
 
             //Show box "message" and "send" button when button "joinGroup" is clicked.
             $('#joinGroup').click(function () {
-                var test = boolean; //boolean temporaire, car je dois le recup d'un get set
-                    if ( test == true) {
-                        $(document).ready(function () {
-                            $('#textmessage').show();
-                            $('#message').show();
-                            $('#sendmessage').show();
-                        });
-                    }
+                //show when user is connected
+                chat.server.send('@Model.Id', $('#userName').val(), "connected");                 
+                console.log(@myTakingNotes == 'TakingNotes');
+                if ( @myTakingNotes == 'TakingNotes') {
+                    $(document).ready(function () {
+                        $('#textmessage').show();
+                        $('#message').show();
+                        $('#sendmessage').show();
+                    });
+                }              
             });
+            //--------------WIP---------------
 
-            //create here a get set boolean class
-            
-            //show when user is connected
-            chat.server.send('@Model.Id', $('#userName').val(), "connected");
-
-                            //--------------WIP---------------
-        });
-
-
-                        
-            //go!
-
-            
+                               
+            //go!          
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
                 console.log('joining group @Model.Id...');
@@ -93,16 +95,9 @@
                      console.log('group joined.');
                      // Set initial focus to message input box.
                     $('#message').focus();
-
                 });
-                //----WIP---------------
-                chat.client.sendAutorization = function (boolean) {
-                    console.log("boolean = " + boolean.Boolean);
-                    boolean = boolean.Boolean;
-                }
-                //----WIP---------------
-
-            });       
+            });   
+        });
 
 
         // This optional function html-encodes messages for display in the page.

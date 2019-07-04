@@ -24,20 +24,20 @@ namespace SignalRChat
         //----------------WIP--------------
         public class TakingNotes
         {
-            public bool Boolean { get; set; }
+            public string Notes { get; set; }
         }
 
         //envoi autorisation au groupe
-        public async Task SendNotes(string GroupChatId, bool boolean)
+        public async Task SendNotes(string GroupChatId, string notes)
         {
-            await Clients.Group(GroupChatId).autorizeTakingNotes(new TakingNotes() { Boolean = boolean});
+            await Clients.Group(GroupChatId).autorizeTakingNotes(new TakingNotes() { Notes = notes});
         }
 
-        //récupère autorisation au groupe
-        public async Task GetNotesToGroup(string GroupChatId, bool boolean)
-        {
-            await Clients.Group(GroupChatId).sendAutorization("autorizeTakingNotes", boolean);
-        }
+        ////récupère autorisation au groupe
+        //public async Task GetNotesToGroup(string GroupChatId, string notes)
+        //{
+        //    await Clients.Group(GroupChatId).sendAutorization("autorizeTakingNotes", notes);
+        //}
         //----------------WIP--------------
 
 

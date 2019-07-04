@@ -106,16 +106,10 @@ namespace App1
             ButtonPriseDeNotes.IsEnabled = true;
         }
 
-        //en Stangby
-        //public class TakingNotesResult
-        //{
-        //    public string myBoolean { get; set; }
-            
-        //}
 
         private  async void ButtonPriseDeNotes_Click(object sender, RoutedEventArgs e)
         {
-            bool boolean = true;
+            string myTakingNotes = "TakingNotes";
             //--------------WIP---------------
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
@@ -125,15 +119,9 @@ namespace App1
             }
 
             string groupId = stockIdGoodUnique.IdGoodUnique;
-            await myProxy.Invoke("autorizeTakingNotes", groupId, boolean);
+            await myProxy.Invoke("SendNotes", groupId, myTakingNotes);
 
             //--------------WIP---------------
-
-            //var res = await httpClient.GetStringAsync("/Home/TakingNotes/"+ boolean);
-
-            ////pour vérifier si mon JsonResult retourne la bonne valeur
-            //var checkResult = JsonConvert.DeserializeObject<TakingNotesResult>(res);
-            //Console.WriteLine(checkResult);
 
         }
     }
