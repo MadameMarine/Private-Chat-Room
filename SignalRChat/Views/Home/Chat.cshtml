@@ -1,7 +1,10 @@
 ﻿@{
     ViewBag.Title = "Chat";
 }
+
+@*this my global variable*@
 @Html.Hidden("myTakingNotes", "null");
+
 <h1>Chat</h1>
 <h2>Groupe Chat: @Model.Id</h2>
 
@@ -14,12 +17,12 @@
         <input type="text" id="userName" />
         <input type="button" id="joinGroup" value="Join Private Group" />
         <br />
+        <ul id="connection"></ul>
         <label for="TextMessage" id="textmessage">Message...</label>
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
         <input type="hidden" id="displayname" />
-        @*On ne veut plus faire apparaitre messages sur pageweb*@
-        @*<ul id="discussion"></ul>*@
+
     </div>
 </div>
 @section scripts {
@@ -59,44 +62,48 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-             //----WIP---------------
-            //get string = myTakingNotes from UWP
+            //get string myTakingNotes from MainPage
                 chat.client.autorizeTakingNotes = function (notes) {
-                    console.log('myTakingNotes = ' + notes.Notes);
+                    console.log('myTakingNotes from MainPage = ' + notes.Notes);
                     var res = htmlEncode(notes.Notes)
                     $('#myTakingNotes').val(res);
                 }
-            //----WIP---------------
 
-
-            //--------------WIP---------------
-
-            //Show box "message" and "send" button when button "joinGroup" is clicked.
+            //Join group
             $('#joinGroup').click(function () {
-                //show when user is connected
+                $('#joinGroup').prop('disabled', true);
+                $('#userName').prop('disabled', true); 
+                //WIP----------------------------------------------------------------
+                //connection to chathub
+                console.log('joining group @Model.Id...');
+                chat.server.joinGroup('@Model.Id').done(function () {
+                      console.log('user connected to group  @Model.Id');
+                     // Set initial focus to message input box.
+                    $('#message').focus();
+                });
+                //show in App1 when user is connected
                 chat.server.send('@Model.Id', $('#userName').val(), "connected");
-                console.log($('#myTakingNotes').val());
-                console.log($('#myTakingNotes').val() == 'TakingNotes');
-                if ( $('#myTakingNotes').val() == 'TakingNotes') {
-                    $(document).ready(function () {
-                        $('#textmessage').show();
-                        $('#message').show();
-                        $('#sendmessage').show();
-                    });
-                }
+                //Display message connection on web page
+                $('#connection').append('You are connected to @Model.Id  group');
+                //WIP----------------------------------------------------------------
+                
             });
-            //--------------WIP---------------
+
+            //TODO : a mettre dans une fonction mais pas dans evenement click
+            console.log($('#myTakingNotes').val());
+            console.log($('#myTakingNotes').val() == 'TakingNotes');
+            if ( $('#myTakingNotes').val() == 'TakingNotes') {
+                $(document).ready(function () {
+                    $('#textmessage').show();
+                    $('#message').show();
+                    $('#sendmessage').show();
+                });                    
+            }
 
 
             //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
-                console.log('joining group @Model.Id...');
-                chat.server.joinGroup('@Model.Id').done(function () {
-                     console.log('group joined.');
-                     // Set initial focus to message input box.
-                    $('#message').focus();
-                });
             });
         });
 
