@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Chat";
-    var myTakingNotes = "null";
 }
+@Html.Hidden("myTakingNotes", "null");
 <h1>Chat</h1>
 <h2>Groupe Chat: @Model.Id</h2>
 
@@ -32,10 +32,10 @@
     <!--Hide message box and send button-->
     <script type="text/javascript">
         $(document).ready(function () {
-        $('#textmessage').hide();
-        $('#message').hide();
-        $('#sendmessage').hide();
-    });
+            $('#textmessage').hide();
+            $('#message').hide();
+            $('#sendmessage').hide();
+        });
     </script>
     <!--SignalR script to update the chat page and send messages.-->
     <script>
@@ -52,10 +52,10 @@
                     $('#message').val('').focus();
              });
 
-            
+
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (message) {
-                console.log( message.Name + ' ' + message.Message); 
+                console.log( message.Name + ' ' + message.Message);
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
@@ -64,7 +64,7 @@
                 chat.client.autorizeTakingNotes = function (notes) {
                     console.log('myTakingNotes = ' + notes.Notes);
                     var res = htmlEncode(notes.Notes)
-                    @myTakingNotes = res; @*IMPOSSIBLE*@                    
+                    $('#myTakingNotes').val(res);
                 }
             //----WIP---------------
 
@@ -74,20 +74,21 @@
             //Show box "message" and "send" button when button "joinGroup" is clicked.
             $('#joinGroup').click(function () {
                 //show when user is connected
-                chat.server.send('@Model.Id', $('#userName').val(), "connected");                 
-                console.log(@myTakingNotes == 'TakingNotes');
-                if ( @myTakingNotes == 'TakingNotes') {
+                chat.server.send('@Model.Id', $('#userName').val(), "connected");
+                console.log($('#myTakingNotes').val());
+                console.log($('#myTakingNotes').val() == 'TakingNotes');
+                if ( $('#myTakingNotes').val() == 'TakingNotes') {
                     $(document).ready(function () {
                         $('#textmessage').show();
                         $('#message').show();
                         $('#sendmessage').show();
                     });
-                }              
+                }
             });
             //--------------WIP---------------
 
-                               
-            //go!          
+
+            //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
                 console.log('joining group @Model.Id...');
@@ -96,7 +97,7 @@
                      // Set initial focus to message input box.
                     $('#message').focus();
                 });
-            });   
+            });
         });
 
 
