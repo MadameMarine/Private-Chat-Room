@@ -62,17 +62,28 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-            //get string myTakingNotes from MainPage
+                //get string myTakingNotes from MainPage
                 chat.client.autorizeTakingNotes = function (notes) {
                     console.log('myTakingNotes from MainPage = ' + notes.Notes);
                     var res = htmlEncode(notes.Notes)
                     $('#myTakingNotes').val(res);
+
+                    //display MessageBox and Send Buton when autorization button from mainpage clicked
+                    console.log($('#myTakingNotes').val());
+                    console.log($('#myTakingNotes').val() == 'TakingNotes');
+                    if ( $('#myTakingNotes').val() == 'TakingNotes') {
+                        $(document).ready(function () {
+                            $('#textmessage').show();
+                            $('#message').show();
+                            $('#sendmessage').show();
+                        });
+                    }
                 }
 
             //Join group
             $('#joinGroup').click(function () {
                 $('#joinGroup').prop('disabled', true);
-                $('#userName').prop('disabled', true); 
+                $('#userName').prop('disabled', true);
                 //WIP----------------------------------------------------------------
                 //connection to chathub
                 console.log('joining group @Model.Id...');
@@ -86,19 +97,10 @@
                 //Display message connection on web page
                 $('#connection').append('You are connected to @Model.Id  group');
                 //WIP----------------------------------------------------------------
-                
+
             });
 
-            //TODO : a mettre dans une fonction mais pas dans evenement click
-            console.log($('#myTakingNotes').val());
-            console.log($('#myTakingNotes').val() == 'TakingNotes');
-            if ( $('#myTakingNotes').val() == 'TakingNotes') {
-                $(document).ready(function () {
-                    $('#textmessage').show();
-                    $('#message').show();
-                    $('#sendmessage').show();
-                });                    
-            }
+
 
 
             //go!

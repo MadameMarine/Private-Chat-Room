@@ -64,17 +64,6 @@ namespace SignalRChat.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        //Standby , je vais vers SignalR.
-        //[HttpGet]
-        //public JsonResult TakingNotes(bool boolean)
-        //{
-        //    var res = new
-        //    {
-        //        myBoolean = boolean
-        //    };
-        //    return Json(res, JsonRequestBehavior.AllowGet);
-        //}
-
         #endregion
 
     }
