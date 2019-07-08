@@ -110,8 +110,7 @@ namespace App1
         private  async void ButtonPriseDeNotes_Click(object sender, RoutedEventArgs e)
         {
             string myTakingNotes = "TakingNotes";
-            //--------------WIP---------------
-            //Connection au ChatHub
+            //Connection to ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
                 Console.WriteLine(idMaextro_ + " is connecting to server...");
@@ -120,8 +119,6 @@ namespace App1
 
             string groupId = stockIdGoodUnique.IdGoodUnique;
             await myProxy.Invoke("SendNotes", groupId, myTakingNotes);
-
-            //--------------WIP---------------
 
         }
     }

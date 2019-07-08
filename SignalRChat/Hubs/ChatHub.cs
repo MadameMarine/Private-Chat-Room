@@ -21,7 +21,6 @@ namespace SignalRChat
             await Clients.Group(groupId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
         }
 
-        //----------------WIP--------------
         public class TakingNotes
         {
             public string Notes { get; set; }
@@ -32,13 +31,7 @@ namespace SignalRChat
         {
             await Clients.Group(GroupChatId).autorizeTakingNotes(new TakingNotes() { Notes = notes});
         }
-
-        ////récupère autorisation au groupe
-        //public async Task GetNotesToGroup(string GroupChatId, string notes)
-        //{
-        //    await Clients.Group(GroupChatId).sendAutorization("autorizeTakingNotes", notes);
-        //}
-        //----------------WIP--------------
+     
 
 
         //ajout utilisateur dans un groupe
