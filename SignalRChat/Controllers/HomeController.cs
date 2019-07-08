@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Client;
+using SignalRChat.url_friendly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -8,6 +12,7 @@ namespace SignalRChat.Controllers
 {
     public class HomeController : Controller
     {
+       
         public ActionResult Index()
         {
             return View();
@@ -39,12 +44,21 @@ namespace SignalRChat.Controllers
             return View(new ChatEditViewModel() { Id = id});
         }
 
+
+
         [HttpGet]
-        public JsonResult CreateSession()
+        public JsonResult CreateSession(string id)
         {
+            var idStringHelper = StringHelper.URLFriendly(id);
+            var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
+            var idFriendly = Regex.Replace(idFriend, @"-", "");
+            var generatedGroupId = idFriendly;
+            
+           
             var res = new
             {
-                publicUrl = "http://localhost:52527/Home/Chat/Compositeur1234"
+                publicUrl = "http://localhost:52527/Home/Chat/"+ generatedGroupId,
+                groupId = generatedGroupId
             };
 
             return Json(res, JsonRequestBehavior.AllowGet);

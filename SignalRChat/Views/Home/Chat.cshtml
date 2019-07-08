@@ -17,7 +17,8 @@
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
         <input type="hidden" id="displayname" />
-        <ul id="discussion"></ul>
+        @*On ne veut plus faire apparaitre messages sur pageweb*@
+        @*<ul id="discussion"></ul>*@
     </div>
 </div>
 @section scripts {
@@ -64,7 +65,10 @@
                     $('#textmessage').show();
                     $('#message').show();
                     $('#sendmessage').show();
-                 });
+                });
+                //show when user is connected
+                chat.server.send('@Model.Id', $('#userName').val(), "connected");
+
             });
 
                         
@@ -78,9 +82,6 @@
                      console.log('group joined.');
                      // Set initial focus to message input box.
                     $('#message').focus();
-
-                   
-
 
                 });
 

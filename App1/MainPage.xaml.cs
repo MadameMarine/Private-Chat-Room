@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -30,14 +31,18 @@ namespace App1
         private IHubProxy myProxy;
         HttpClient httpClient = new HttpClient();
         private string baseUrl = "http://localhost:52527";
+        private string idMaextro_ = "Maextro_";
+        //@idUnivers: nom de l'univers
+        private string idUnivers = "Super &@#voitze";
 
+       
         //Départ!
         public MainPage()
         {
             
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
-           
+          
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -45,6 +50,7 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
+          
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
             {
@@ -55,62 +61,44 @@ namespace App1
 
                 });
             });
-
-          
+           
         }
 
- 
-        private async void JoinButton_Click(object sender, RoutedEventArgs e)
-        {
-            userTextbox.IsEnabled = false;
-            messageTextBox.IsEnabled = true;
-            envoyerButton.IsEnabled = true;
-
-
-
-
-            if (myHubConnection.State != ConnectionState.Connected)
-            {
-                Console.WriteLine("Compositeur is connecting to server...");
-                await myHubConnection.Start();
-
-            }
-
-
-
-            //Join la room            
-            Console.WriteLine("Compositeur joining group du compositeur...");
-
-            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
-            await myProxy.Invoke("joinGroup", "Compositeur");
-            Console.WriteLine("Compositeur group joined");         
-
-        }
-
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO : Remplaser "Compositeur" par idUrl qu'on aura recu du serveur.
-            await myProxy.Invoke("Send", "Compositeur", userTextbox.Text, messageTextBox.Text);
-        }
         public class CreateSessionResult
         {
             public string publicUrl { get; set; }
+            public string groupId { get; set; }
         }
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
-            
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession");
+            //Connection au ChatHub
+            if (myHubConnection.State != ConnectionState.Connected)
+            {
+                Console.WriteLine(idMaextro_ + " is connecting to server...");
+                await myHubConnection.Start(); 
 
-            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);
-            //string checkResult = JsonConvert.DeserializeObject<Class>(res);
+            }
 
+            //Create unique id url
+            var url = Regex.Replace(idUnivers, @"&", ""); ;
+            var urlGood = Uri.EscapeDataString(url);
+            var rng = new Random();
+            var idGoodUnique = urlGood + rng.Next(10,99).ToString() + rng.Next(10,99).ToString();
 
-            Console.WriteLine(checkResult);
-           
+            //Create Session
+            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);     
+            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);            
+            Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.publicUrl;
-            joinButton.IsEnabled = true;
+           
+            //Join la room            
+            Console.WriteLine(idMaextro_ + "joining group du compositeur...");
+            await myProxy.Invoke("joinGroup", checkResult.groupId);            
+            await myProxy.Invoke("Send", checkResult.groupId, idMaextro_, "connected");
+            Console.WriteLine(idMaextro_ + "group joined");
+
         }
 
-        
+
     }
 }
