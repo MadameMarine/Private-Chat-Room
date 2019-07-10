@@ -31,13 +31,14 @@ namespace SignalRChat
             return _stockSession[id];             
         }
 
+        //----------------WIP------------
         public Session GetCurrentActivity(string currentActivity)
         {
             return _stockSession[currentActivity];
         }
+        //----------------WIP------------
 
-
-        public Session CreateSession(string suggestedId, string suggestedCurrentActivity)
+        public Session CreateSession(string suggestedId)
         {
             var idStringHelper = StringHelper.URLFriendly(suggestedId);
             var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
@@ -46,7 +47,6 @@ namespace SignalRChat
             {
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
                 Id = idFriendly,
-                CurrentActivity = suggestedCurrentActivity
             };
 
             _stockSession[res.Id] = res;
@@ -56,7 +56,8 @@ namespace SignalRChat
     }
     public class ChatHub : Hub
     {
-        
+              
+
         public class ChatMessage
         {
             public string GroupChatId { get; set; }
@@ -64,29 +65,45 @@ namespace SignalRChat
             public string Message { get; set; }
         }
 
-        public async Task Send(string groupId, string name, string message)
+        public async Task SendNote(string sessionId, string name, string message)
         {
-            // Call the addNewMessageToPage method to update clients.
-            await Clients.Group(groupId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+            // Call the addNewMessageToPage method to send message/notes
+            //TODO (quand session done) : envoyer uniquement au compositeur.
+            await Clients.Group(sessionId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
         }
 
-        public class TakingNotes
+
+        public async Task StartActivity(string sessionId, string newActivity)
         {
-            public string Notes { get; set; }
+            //MAJ Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.
+            SessionService.Instance.GetSession(sessionId);
+
+            //appelle les clients pour démarrrer la nouvelle activité newActivity dès maintenant
+
+            //----------WIP---------------
+            await Clients.Group(sessionId).startSession(SessionService.Instance.GetCurrentActivity(newActivity));
+
         }
 
-        //envoi autorisation au groupe
-        public async Task SendNotes(string sessionId, string notes)
-        {
-            await Clients.Group(sessionId).autorizeTakingNotes(new TakingNotes { Notes = notes});
-        }
-     
 
         public Session JoinSession(string sessionId)
         {
             this.Groups.Add(this.Context.ConnectionId, sessionId);
             return SessionService.Instance.GetSession(sessionId);
         }
+
+
+        //public class TakingNotes
+        //{
+        //    public string Notes { get; set; }
+        //}
+
+        ////envoi autorisation au groupe
+        //public async Task SendNotes(string sessionId, string notes)
+        //{
+        //    await Clients.Group(sessionId).autorizeTakingNotes(new TakingNotes { Notes = notes});
+        //}
+
 
         //supprime un utilisateur
         //public Task LeaveRoom(string roomName)

@@ -47,10 +47,10 @@ namespace SignalRChat.Controllers
         #region ActionControllers
 
         [HttpGet]
-        public JsonResult CreateSession(string id, string currentActivity)
+        public JsonResult CreateSession(string id)
         {
 
-            var session = SessionService.Instance.CreateSession(id, currentActivity);
+            var session = SessionService.Instance.CreateSession(id);
            return Json(session, JsonRequestBehavior.AllowGet);
         }
 
