@@ -19,21 +19,25 @@ namespace SignalRChat
     public class SessionService
     {
         private readonly Dictionary<string, Session> _stockSession = new Dictionary<string, Session>();
-
         public static SessionService Instance { get; } = new SessionService();
-
-      
+             
 
         private SessionService()
         {
         }
 
-        public Session GetSession(string id)
-        {
-            return null;/* A COMPLETER : trouver dans le dico*/;
+        public Session GetSession(string id) 
+        {            
+            return _stockSession[id];             
         }
 
-        public Session CreateSession(string suggestedId)
+        public Session GetCurrentActivity(string currentActivity)
+        {
+            return _stockSession[currentActivity];
+        }
+
+
+        public Session CreateSession(string suggestedId, string suggestedCurrentActivity)
         {
             var idStringHelper = StringHelper.URLFriendly(suggestedId);
             var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
@@ -41,11 +45,11 @@ namespace SignalRChat
             var res = new Session
             {
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
-                Id = idFriendly
-                //TODO : remplir
+                Id = idFriendly,
+                CurrentActivity = suggestedCurrentActivity
             };
 
-            //ajouter au dic
+            _stockSession[res.Id] = res;
             return res;
 
         }

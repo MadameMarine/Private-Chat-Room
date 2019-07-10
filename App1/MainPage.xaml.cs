@@ -120,6 +120,8 @@ namespace App1
                 await myHubConnection.Start();
             }
 
+            //TODO: MAJ currentActivity
+
             string groupId = stockIdGoodUnique.IdGoodUnique;
             await myProxy.Invoke("SendNotes", groupId, myTakingNotes);
 

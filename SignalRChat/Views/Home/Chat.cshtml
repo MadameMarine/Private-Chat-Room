@@ -87,9 +87,14 @@
                 $('#userName').prop('disabled', true);
 
                 //connection to chathub
-                console.log('joining group @Model.Id...');
-                chat.server.JoinSession('@Model.Id').done(function () {
-                      console.log('user connected to group  @Model.Id');
+                console.log('joining session @Model.Id...');
+                chat.server.JoinSession('@Model.Id').done(function (session) {
+                    console.log('user connected to session  @Model.Id');
+                    //TODO : recupérer currentActivity, si not pas de prise de not
+                    //sinon 
+                    //prise de notes possible
+
+
                      // Set initial focus to message input box.
                     $('#message').focus();
                 });
