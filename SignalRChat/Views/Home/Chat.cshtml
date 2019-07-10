@@ -81,14 +81,14 @@
                     }
                 }
 
-            //Join group
+            //Join Session
             $('#joinGroup').click(function () {
                 $('#joinGroup').prop('disabled', true);
                 $('#userName').prop('disabled', true);
 
                 //connection to chathub
                 console.log('joining group @Model.Id...');
-                chat.server.joinGroup('@Model.Id').done(function () {
+                chat.server.JoinSession('@Model.Id').done(function () {
                       console.log('user connected to group  @Model.Id');
                      // Set initial focus to message input box.
                     $('#message').focus();
