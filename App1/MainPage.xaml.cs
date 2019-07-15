@@ -103,7 +103,7 @@ namespace App1
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
             await myProxy.Invoke("JoinSession", checkResult.Id);            
-            await myProxy.Invoke("Send", checkResult.Id, idMaextro_, "connected");
+            await myProxy.Invoke("SendNote", checkResult.Id, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 
             ButtonPriseDeNotes.IsEnabled = true;

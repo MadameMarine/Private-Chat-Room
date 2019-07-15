@@ -27,16 +27,17 @@ namespace SignalRChat
         }
 
         public Session GetSession(string id) 
-        {            
+        {   
+            //TODO : mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
             return _stockSession[id];             
         }
 
-        //----------------WIP------------
-        public Session GetCurrentActivity(string currentActivity)
-        {
-            return _stockSession[currentActivity];
-        }
-        //----------------WIP------------
+        ////----------------WIP-----------------------------------------
+        //public Session GetCurrentActivity(string currentActivity)
+        //{
+        //    return _stockSession[currentActivity];
+        //}
+        ////----------------WIP-----------------------------------------
 
         public Session CreateSession(string suggestedId)
         {
@@ -68,20 +69,22 @@ namespace SignalRChat
         public async Task SendNote(string sessionId, string name, string message)
         {
             // Call the addNewMessageToPage method to send message/notes
-            //TODO (quand session done) : envoyer uniquement au compositeur.
+            //TODO (à faire en dernier) : envoyer uniquement au compositeur, donc modifier le Group(sessionId)
             await Clients.Group(sessionId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+
         }
 
 
         public async Task StartActivity(string sessionId, string newActivity)
         {
             //MAJ Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.
-            SessionService.Instance.GetSession(sessionId);
+            var mySession = SessionService.Instance.GetSession(sessionId);
+            mySession.CurrentActivity = newActivity;
 
             //appelle les clients pour démarrrer la nouvelle activité newActivity dès maintenant
 
             //----------WIP---------------
-            await Clients.Group(sessionId).startSession(SessionService.Instance.GetCurrentActivity(newActivity));
+            await Clients.Group(sessionId).startActivity(newActivity);
 
         }
 
