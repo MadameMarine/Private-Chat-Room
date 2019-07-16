@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using SignalRChat.url_friendly;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-using SignalRChat.url_friendly;
 
 namespace SignalRChat
 {
@@ -20,24 +18,27 @@ namespace SignalRChat
     {
         private readonly Dictionary<string, Session> _stockSession = new Dictionary<string, Session>();
         public static SessionService Instance { get; } = new SessionService();
-             
+
 
         private SessionService()
         {
         }
 
-        public Session GetSession(string id) 
-        {   
-            //TODO : mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
-            return _stockSession[id];             
+        public Session GetSession(string id)
+        {
+            //TODO (à faire en dernier) : mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
+            return _stockSession[id];
         }
 
-        ////----------------WIP-----------------------------------------
-        //public Session GetCurrentActivity(string currentActivity)
-        //{
-        //    return _stockSession[currentActivity];
-        //}
-        ////----------------WIP-----------------------------------------
+
+        //----------------WIP-----------------------------------------
+        public void UpdateCurrentActivity(string sessionId, string newActivity)
+        {
+            //Remplace current activity by newActivity
+            GetSession(sessionId).CurrentActivity = newActivity;
+            
+        }
+        //----------------WIP-----------------------------------------
 
         public Session CreateSession(string suggestedId)
         {
@@ -57,7 +58,6 @@ namespace SignalRChat
     }
     public class ChatHub : Hub
     {
-              
 
         public class ChatMessage
         {
@@ -68,8 +68,8 @@ namespace SignalRChat
 
         public async Task SendNote(string sessionId, string name, string message)
         {
-            // Call the addNewMessageToPage method to send message/notes
             //TODO (à faire en dernier) : envoyer uniquement au compositeur, donc modifier le Group(sessionId)
+            // Call the addNewMessageToPage method to send message/notes
             await Clients.Group(sessionId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
@@ -77,15 +77,19 @@ namespace SignalRChat
 
         public async Task StartActivity(string sessionId, string newActivity)
         {
-            //MAJ Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.
-            var mySession = SessionService.Instance.GetSession(sessionId);
-            mySession.CurrentActivity = newActivity;
+            //maj de Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.
+            //var mySession = SessionService.Instance.GetSession(sessionId);
+            //mySession.CurrentActivity = newActivity;
+
+            
+
+            SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);
+            //_sessionService.GetSession(sessionId);
+            //_sessionService.UpdateCurrentActivity(newActivity);
 
             //appelle les clients pour démarrrer la nouvelle activité newActivity dès maintenant
-
-            //----------WIP---------------
             await Clients.Group(sessionId).startActivity(newActivity);
-
+           
         }
 
 
