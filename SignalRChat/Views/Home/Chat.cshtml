@@ -2,9 +2,6 @@
     ViewBag.Title = "Chat";
 }
 
-@*this is my global variable*@
-@Html.Hidden("myTakingNotes",  "null");
-
 <h1>Chat</h1>
 <h2>Groupe Chat: @Model.Id</h2>
 
@@ -50,7 +47,7 @@
 
              $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.send('@Model.Id', $('#userName').val(), $('#message').val());
+                    chat.server.sendNote('@Model.Id', $('#userName').val(), $('#message').val());
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
              });
@@ -62,26 +59,7 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-            //A SUPPRIMER QUAND CODE FONCTIONNEL
-                ////get string myTakingNotes from MainPage
-                //chat.client.autorizeTakingNotes = function (notes) {
-                //    console.log('myTakingNotes from MainPage = ' + notes.Notes);
-                //    var res = htmlEncode(notes.Notes)
-                //    $('#myTakingNotes').val(res);
-
-                //    //display MessageBox and Send Buton when autorization button from mainpage clicked
-                //    console.log($('#myTakingNotes').val());
-                //    console.log($('#myTakingNotes').val() == 'TakingNotes');
-
-                //    if ( $('#myTakingNotes').val() == 'TakingNotes') {
-                        //$(document).ready(function () {
-                        //    $('#textmessage').show();
-                        //    $('#message').show();
-                        //    $('#sendmessage').show();
-                        //});
-                //    }
-                //}
-
+            
             //Join Session
             $('#joinGroup').click(function () {
                 $('#joinGroup').prop('disabled', true);
@@ -92,14 +70,14 @@
                 chat.server.joinSession('@Model.Id').done(function (session) {
                     console.log('user connected to session  @Model.Id');
 
-                    //TODO : Lire données dans dictionary
+                    //Read data in dictionary
                     var currentActivity = session.CurrentActivity;                    
                     console.log("joinsession return = " + currentActivity); 
 
-                    //TODO : recupérer currentActivity, si not pas de prise de not
-                    //sinon 
-                    //prise de notes possible
+                    //If currentActivity has changed : display notes
                     if (currentActivity != null) {
+                        //idée setTimeout : attendre x minutes dans la boucle if
+                        //idée2 while mais vide
                             $(document).ready(function () {
                                 $('#textmessage').show();
                                 $('#message').show();
@@ -117,16 +95,12 @@
                 $('#connection').append('You are connected to @Model.Id  group');
             });
 
-
-
-
             //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
 
             });
         });
-
 
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {

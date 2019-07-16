@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using SignalRChat.url_friendly;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -26,19 +27,28 @@ namespace SignalRChat
 
         public Session GetSession(string id)
         {
-            //TODO (à faire en dernier) : mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
-            return _stockSession[id];
+            //TODO: mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
+            //return _stockSession[id];
+            Session _returnValue = null;
+            try
+            {
+                _returnValue = _stockSession[id];
+            }
+            catch (InvalidCastException e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return _returnValue;
         }
 
 
-        //----------------WIP-----------------------------------------
         public void UpdateCurrentActivity(string sessionId, string newActivity)
         {
             //Remplace current activity by newActivity
             GetSession(sessionId).CurrentActivity = newActivity;
             
         }
-        //----------------WIP-----------------------------------------
 
         public Session CreateSession(string suggestedId)
         {
@@ -68,8 +78,8 @@ namespace SignalRChat
 
         public async Task SendNote(string sessionId, string name, string message)
         {
-            //TODO (à faire en dernier) : envoyer uniquement au compositeur, donc modifier le Group(sessionId)
-            // Call the addNewMessageToPage method to send message/notes
+            //TODO: envoyer uniquement au compositeur, donc modifier le Group(sessionId)
+            //Call the addNewMessageToPage method to send message/notes
             await Clients.Group(sessionId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
@@ -77,15 +87,8 @@ namespace SignalRChat
 
         public async Task StartActivity(string sessionId, string newActivity)
         {
-            //maj de Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.
-            //var mySession = SessionService.Instance.GetSession(sessionId);
-            //mySession.CurrentActivity = newActivity;
-
-            
-
-            SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);
-            //_sessionService.GetSession(sessionId);
-            //_sessionService.UpdateCurrentActivity(newActivity);
+            //maj de Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.          
+            SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);            
 
             //appelle les clients pour démarrrer la nouvelle activité newActivity dès maintenant
             await Clients.Group(sessionId).startActivity(newActivity);
