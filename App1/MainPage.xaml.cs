@@ -102,7 +102,7 @@ namespace App1
 
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
-            await myProxy.Invoke("JoinSession", checkResult.Id);            
+            await myProxy.Invoke("JoinSession", checkResult.Id);        //temporaire : j'ai ajouté le username idMaextro    
             await myProxy.Invoke("SendNote", checkResult.Id, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 

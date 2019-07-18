@@ -43,7 +43,7 @@
             var userName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
-            var idUrl = '';
+            var idUrl = ''; 
 
              $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
@@ -59,7 +59,20 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-            
+
+            function handleStartingActivity(newActivity) {
+                    console.log('startActivity :' + newActivity); 
+
+                if (newActivity == 'TakingNotes') {
+                    $('#textmessage').show();
+                    $('#message').show();
+                    $('#sendmessage').show();
+                }
+             }
+                      
+            chat.client.startingActivity = handleStartingActivity;
+
+
             //Join Session
             $('#joinGroup').click(function () {
                 $('#joinGroup').prop('disabled', true);
@@ -71,24 +84,19 @@
                     console.log('user connected to session  @Model.Id');
 
                     //Read data in dictionary
-                    var currentActivity = session.CurrentActivity;                    
-                    console.log("joinsession return = " + currentActivity); 
+                    var currentActivity = session.CurrentActivity;
+                    console.log("joinsession return = " + currentActivity);
 
                     //If currentActivity has changed : display notes
                     if (currentActivity != null) {
-                        //idée setTimeout : attendre x minutes dans la boucle if
-                        //idée2 while mais vide
-                            $(document).ready(function () {
-                                $('#textmessage').show();
-                                $('#message').show();
-                                $('#sendmessage').show();
-                            });
+                        handleStartingActivity(currentActivity);
                     }
-
                      // Set initial focus to message input box.
                     $('#message').focus();
                 });
 
+            
+               
                 //show in App1 when user is connected
                 chat.server.sendNote('@Model.Id', $('#userName').val(), "connected");
                 //Display message connection on web page

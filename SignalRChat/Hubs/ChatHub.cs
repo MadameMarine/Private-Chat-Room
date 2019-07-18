@@ -7,9 +7,19 @@ using System.Threading.Tasks;
 
 namespace SignalRChat
 {
+    ////-------WIP-------------------------------------
+    //public class UserConnection
+    //{
+    //    public string UserName { get; set; }
+    //}
+    ////-------WIP-------------------------------------
 
     public class Session
     {
+        ////-------WIP--------Créer une liste?-------------
+        //public List<UserConnection> UserName { get; set; }
+        ////-------WIP-------------------------------------
+
         public string PublicUrl { get; set; }
         public string Id { get; set; }
         public string CurrentActivity { get; set; }
@@ -27,8 +37,6 @@ namespace SignalRChat
 
         public Session GetSession(string id)
         {
-            //TODO: mettre un try pour envisager le cas où l'utilisateur met une mauvaise adresse
-            //return _stockSession[id];
             Session _returnValue = null;
             try
             {
@@ -39,19 +47,30 @@ namespace SignalRChat
                 Console.WriteLine(e);
             }
 
+            //return _stockSession[id];
             return _returnValue;
         }
 
 
         public void UpdateCurrentActivity(string sessionId, string newActivity)
         {
-            //Remplace current activity by newActivity
+            //Replace current activity by newActivity
             GetSession(sessionId).CurrentActivity = newActivity;
             
         }
 
+        ////-------WIP-------------------------------------
+
+        //public void AddUserName(string sessionId, string UserName)
+        //{
+        //    //GetSession(sessionId).UserName = UserName; // à revoir 
+        //}
+        ////-------WIP-------------------------------------
+
+
         public Session CreateSession(string suggestedId)
         {
+            //set up id friendly
             var idStringHelper = StringHelper.URLFriendly(suggestedId);
             var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
             var idFriendly = Regex.Replace(idFriend, @"-", "");
@@ -84,23 +103,38 @@ namespace SignalRChat
 
         }
 
-
+        //class Activity
+        //{
+        //    public string myActivity { get; set; }
+        //}
         public async Task StartActivity(string sessionId, string newActivity)
         {
-            //maj de Session dans sessionService pour que les futurs join session s'initialise avec l'activité courante.          
+            //maj de Session dans sessionService: futurs join session s'initialisent avec activité courante     
             SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);            
 
-            //appelle les clients pour démarrrer la nouvelle activité newActivity dès maintenant
-            await Clients.Group(sessionId).startActivity(newActivity);
+            //appelle les clients pour démarrrer la nouvelle activité newActivity
+            await Clients.Group(sessionId).startingActivity(newActivity);
            
         }
 
 
-        public Session JoinSession(string sessionId)
+        public Session JoinSession(string sessionId) //temporaire : j'ai ajouté le username   
         {
             this.Groups.Add(this.Context.ConnectionId, sessionId);
             return SessionService.Instance.GetSession(sessionId);
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //public class TakingNotes
