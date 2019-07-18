@@ -103,10 +103,7 @@ namespace SignalRChat
 
         }
 
-        //class Activity
-        //{
-        //    public string myActivity { get; set; }
-        //}
+     
         public async Task StartActivity(string sessionId, string newActivity)
         {
             //maj de Session dans sessionService: futurs join session s'initialisent avec activité courante     
@@ -123,18 +120,6 @@ namespace SignalRChat
             this.Groups.Add(this.Context.ConnectionId, sessionId);
             return SessionService.Instance.GetSession(sessionId);
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //public class TakingNotes
