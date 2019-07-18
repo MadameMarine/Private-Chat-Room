@@ -14,6 +14,7 @@
         <TextBox HorizontalAlignment="Left" Margin="78,20,0,0" Text="Ouvrir une session collaborative" VerticalAlignment="Top" Width="216" IsEnabled="False"/>
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="28,85,0,0" Text="" VerticalAlignment="Top" Width="396" IsEnabled="False"/>
         <TextBox x:Name="messages" IsEnabled="False" RenderTransformOrigin="-0.211,0.58" Margin="28,320,705,329" />
+        <Button x:Name="ButtonPriseDeNotes" Content="Débuter prise de notes" Margin="28,176,0,0" VerticalAlignment="Top" Width="198" IsEnabled="False" Click="ButtonPriseDeNotes_Click"/>
 
     </Grid>
 </Page>
