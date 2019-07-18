@@ -45,33 +45,13 @@
             var chat = $.connection.chatHub;
             var idUrl = ''; 
 
+            //Send Message to App1
              $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
                     chat.server.sendNote('@Model.Id', $('#userName').val(), $('#message').val());
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
              });
-
-
-            // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (message) {
-                console.log( message.Name + ' ' + message.Message);
-                $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
-            };
-
-
-            function handleStartingActivity(newActivity) {
-                    console.log('startActivity :' + newActivity); 
-
-                if (newActivity == 'TakingNotes') {
-                    $('#textmessage').show();
-                    $('#message').show();
-                    $('#sendmessage').show();
-                }
-             }
-                      
-            chat.client.startingActivity = handleStartingActivity;
-
 
             //Join Session
             $('#joinGroup').click(function () {
@@ -93,16 +73,34 @@
                     }
                      // Set initial focus to message input box.
                     $('#message').focus();
-                });
-
-            
+                });            
                
-                //show in App1 when user is connected
+                //Display in App1 when user is connected
                 chat.server.sendNote('@Model.Id', $('#userName').val(), "connected");
                 //Display message connection on web page
                 $('#connection').append('You are connected to @Model.Id  group');
             });
 
+
+            chat.client.startingActivity = handleStartingActivity;
+
+            // Create a function that the hub can call back to display messages.
+            chat.client.addNewMessageToPage = function (message) {
+                console.log( message.Name + ' ' + message.Message);
+                $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
+            };
+
+
+            function handleStartingActivity(newActivity) {
+                console.log('startActivity :' + newActivity); 
+
+                if (newActivity == 'TakingNotes') {
+                    $('#textmessage').show();
+                    $('#message').show();
+                    $('#sendmessage').show();
+                }
+            }
+                                          
             //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
