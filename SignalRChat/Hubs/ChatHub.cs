@@ -11,7 +11,7 @@ namespace SignalRChat
 
     public class Session
     {
-        public string AdminConnectionId { get; set; } //-------WIP
+        public string AdminConnectionId { get; set; } 
         public string PublicUrl { get; set; }
         public string Id { get; set; }
         public string CurrentActivity { get; set; }
@@ -39,11 +39,13 @@ namespace SignalRChat
                 Console.WriteLine(e);
             }
 
-            //return _stockSession[id];
             return _returnValue;
         }
 
-       
+       //public Session GetAdminConnexionid()
+       // {
+       //     return "A completer";
+       // }
 
 
         public void UpdateCurrentActivity(string sessionId, string newActivity)
@@ -63,7 +65,7 @@ namespace SignalRChat
             {
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
                 Id = idFriendly,
-                AdminId = adminId
+                AdminConnectionId = adminId
             };
 
             _stockSession[res.Id] = res;
@@ -74,7 +76,6 @@ namespace SignalRChat
     }
     public class ChatHub : Hub
     {
-
         public class ChatMessage
         {
             public string GroupChatId { get; set; }
@@ -85,11 +86,11 @@ namespace SignalRChat
         public async Task SendNote(string sessionId, string name, string message)
         {
             //Call the addNewMessageToPage method to send message/notes
-            await Clients.Group(null /*idAdmin*/).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+            await Clients.Group(null/*SessionService.Instance.GetAdminConnexionid*/).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
 
-     
+
         public async Task StartActivity(string sessionId, string newActivity) 
         {
             //maj de Session dans sessionService: futurs join session s'initialisent avec activité courante     
