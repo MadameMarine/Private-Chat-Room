@@ -122,5 +122,10 @@ namespace App1
             await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
 
         }
+
+        private void CloseSession_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
