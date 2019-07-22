@@ -69,11 +69,14 @@ namespace App1
             public string IdGoodUnique { get; set; }
         }
 
-        public class CreateSessionResult
+        public class Session
         {
-            public string publicUrl { get; set; }
-            public string groupId { get; set; }
+            public string PublicUrl { get; set; }
+            public string Id { get; set; }
+            public string CurrentActivity { get; set; }
         }
+
+
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
             //Connection au ChatHub
@@ -92,15 +95,15 @@ namespace App1
 
             //Create Session
             var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);    
-            var checkResult = JsonConvert.DeserializeObject<CreateSessionResult>(res);            
+            var checkResult = JsonConvert.DeserializeObject<Session>(res);            
             Console.WriteLine("url : " + checkResult);
-            TextUrl.Text = checkResult.publicUrl;
-            stockIdGoodUnique.IdGoodUnique = checkResult.groupId;
+            TextUrl.Text = checkResult.PublicUrl;
+            stockIdGoodUnique.IdGoodUnique = checkResult.Id;
 
             //Join la room            
             Console.WriteLine(idMaextro_ + "joining group du compositeur...");
-            await myProxy.Invoke("joinGroup", checkResult.groupId);            
-            await myProxy.Invoke("Send", checkResult.groupId, idMaextro_, "connected");
+            await myProxy.Invoke("JoinSession", checkResult.Id);        //temporaire : j'ai ajouté le username idMaextro    
+            await myProxy.Invoke("SendNote", checkResult.Id, idMaextro_, "connected");
             Console.WriteLine(idMaextro_ + "group joined");
 
             ButtonPriseDeNotes.IsEnabled = true;
@@ -117,8 +120,9 @@ namespace App1
                 await myHubConnection.Start();
             }
 
+            //MAJ Current Activity
             string groupId = stockIdGoodUnique.IdGoodUnique;
-            await myProxy.Invoke("SendNotes", groupId, myTakingNotes);
+            await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
 
         }
     }

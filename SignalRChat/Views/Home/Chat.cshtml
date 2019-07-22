@@ -2,9 +2,6 @@
     ViewBag.Title = "Chat";
 }
 
-@*this is my global variable*@
-@Html.Hidden("myTakingNotes",  "null");
-
 <h1>Chat</h1>
 <h2>Groupe Chat: @Model.Id</h2>
 
@@ -46,15 +43,46 @@
             var userName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
-            var idUrl = '';
+            var idUrl = ''; 
 
+            //Send Message to App1
              $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.send('@Model.Id', $('#userName').val(), $('#message').val());
+                    chat.server.sendNote('@Model.Id', $('#userName').val(), $('#message').val());
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
              });
 
+            //Join Session
+            $('#joinGroup').click(function () {
+                $('#joinGroup').prop('disabled', true);
+                $('#userName').prop('disabled', true);
+
+                //connection to chathub
+                console.log('joining session @Model.Id...');
+                chat.server.joinSession('@Model.Id').done(function (session) {
+                    console.log('user connected to session  @Model.Id');
+
+                    //Read data in dictionary
+                    var currentActivity = session.CurrentActivity;
+                    console.log("joinsession return = " + currentActivity);
+
+                    //If currentActivity has changed : display notes
+                    if (currentActivity != null) {
+                        handleStartingActivity(currentActivity);
+                    }
+                     // Set initial focus to message input box.
+                    $('#message').focus();
+                });            
+               
+                //Display in App1 when user is connected
+                chat.server.sendNote('@Model.Id', $('#userName').val(), "connected");
+                //Display message connection on web page
+                $('#connection').append('You are connected to @Model.Id  group');
+            });
+
+
+            chat.client.startingActivity = handleStartingActivity;
 
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (message) {
@@ -62,54 +90,23 @@
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
-                //get string myTakingNotes from MainPage
-                chat.client.autorizeTakingNotes = function (notes) {
-                    console.log('myTakingNotes from MainPage = ' + notes.Notes);
-                    var res = htmlEncode(notes.Notes)
-                    $('#myTakingNotes').val(res);
 
-                    //display MessageBox and Send Buton when autorization button from mainpage clicked
-                    console.log($('#myTakingNotes').val());
-                    console.log($('#myTakingNotes').val() == 'TakingNotes');
+            function handleStartingActivity(newActivity) {
+                console.log('startActivity :' + newActivity); 
 
-                    if ( $('#myTakingNotes').val() == 'TakingNotes') {
-                        $(document).ready(function () {
-                            $('#textmessage').show();
-                            $('#message').show();
-                            $('#sendmessage').show();
-                        });
-                    }
+                if (newActivity == 'TakingNotes') {
+                    $('#textmessage').show();
+                    $('#message').show();
+                    $('#sendmessage').show();
                 }
-
-            //Join group
-            $('#joinGroup').click(function () {
-                $('#joinGroup').prop('disabled', true);
-                $('#userName').prop('disabled', true);
-
-                //connection to chathub
-                console.log('joining group @Model.Id...');
-                chat.server.joinGroup('@Model.Id').done(function () {
-                      console.log('user connected to group  @Model.Id');
-                     // Set initial focus to message input box.
-                    $('#message').focus();
-                });
-
-                //show in App1 when user is connected
-                chat.server.send('@Model.Id', $('#userName').val(), "connected");
-                //Display message connection on web page
-                $('#connection').append('You are connected to @Model.Id  group');
-            });
-
-
-
-
+            }
+                                          
             //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
 
             });
         });
-
 
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {

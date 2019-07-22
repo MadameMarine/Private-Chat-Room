@@ -49,19 +49,9 @@ namespace SignalRChat.Controllers
         [HttpGet]
         public JsonResult CreateSession(string id)
         {
-            var idStringHelper = StringHelper.URLFriendly(id);
-            var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
-            var idFriendly = Regex.Replace(idFriend, @"-", "");
-            var generatedGroupId = idFriendly;
-            
-           
-            var res = new
-            {
-                publicUrl = "http://localhost:52527/Home/Chat/"+ generatedGroupId,
-                groupId = generatedGroupId
-            };
 
-            return Json(res, JsonRequestBehavior.AllowGet);
+            var session = SessionService.Instance.CreateSession(id);
+           return Json(session, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
