@@ -42,17 +42,15 @@ namespace SignalRChat
             return _returnValue;
         }
 
-       //public Session GetAdminConnexionid()
-       // {
-       //     return "A completer";
-       // }
-
+        public string GetAdminConnexionId(string sessionId)
+        {
+            return GetSession(sessionId).AdminConnectionId;
+        }
 
         public void UpdateCurrentActivity(string sessionId, string newActivity)
         {
             //Replace current activity by newActivity
-            GetSession(sessionId).CurrentActivity = newActivity;
-            
+            GetSession(sessionId).CurrentActivity = newActivity;           
         }
 
         public Session CreateSession(string suggestedId, string adminId)
@@ -63,14 +61,13 @@ namespace SignalRChat
             var idFriendly = Regex.Replace(idFriend, @"-", "");
             var res = new Session
             {
+                AdminConnectionId = adminId,
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
-                Id = idFriendly,
-                AdminConnectionId = adminId
+                Id = idFriendly
             };
 
             _stockSession[res.Id] = res;
             return res;
-
         }
 
     }
@@ -85,8 +82,8 @@ namespace SignalRChat
 
         public async Task SendNote(string sessionId, string name, string message)
         {
-            //Call the addNewMessageToPage method to send message/notes
-            await Clients.Group(null/*SessionService.Instance.GetAdminConnexionid*/).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+            //Call the addNewMessageToPage method to send message/notes  to compositeur
+            await Clients.Group(SessionService.Instance.GetAdminConnexionId(sessionId)).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
 

@@ -97,9 +97,7 @@ namespace App1
             //Create Session
             //var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);
 
-            //-----------------WIP-------------------------------------------
             var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
-            //-----------------WIP-------------------------------------------
     
             Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.PublicUrl;
