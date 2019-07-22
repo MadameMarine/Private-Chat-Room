@@ -32,11 +32,9 @@ namespace App1
         HttpClient httpClient = new HttpClient();
         private string baseUrl = "http://localhost:52527";
         private string idMaestro_ = "Maestro_";
-        //@idUnivers: nom de l'univers
         private string idUnivers = "Monde";
         GetIdGoodUnique stockIdGoodUnique = new GetIdGoodUnique();
 
-        //Départ!
         public MainPage()
         {
             
@@ -83,7 +81,6 @@ namespace App1
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
-                Console.WriteLine(idMaestro_ + " is connecting to server...");
                 await myHubConnection.Start(); 
 
             }
@@ -92,22 +89,20 @@ namespace App1
             var url = Regex.Replace(idUnivers, @"&", ""); ;
             var urlGood = Uri.EscapeDataString(url);
             var rng = new Random();
-            var idGoodUnique = urlGood + rng.Next(10, 99).ToString() + rng.Next(10, 99).ToString();           
+            var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
 
-            //Create Session
             //var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);
 
+            //Call Create Session
             var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
     
-            Console.WriteLine("url : " + checkResult);
             TextUrl.Text = checkResult.PublicUrl;
             stockIdGoodUnique.IdGoodUnique = checkResult.Id;
 
             //Join la room            
             Console.WriteLine(idMaestro_ + "joining group du compositeur...");
             await myProxy.Invoke("JoinSession", checkResult.Id);        
-            await myProxy.Invoke("SendNote", checkResult.Id, idMaestro_, "connected");
-            Console.WriteLine(idMaestro_ + "group joined");
+            //await myProxy.Invoke("SendNote", checkResult.Id, idMaestro_, "connected");
 
             ButtonPriseDeNotes.IsEnabled = true;
         }
@@ -119,7 +114,6 @@ namespace App1
             //Connection to ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
-                Console.WriteLine(idMaestro_ + " is connecting to server...");
                 await myHubConnection.Start();
             }
 
