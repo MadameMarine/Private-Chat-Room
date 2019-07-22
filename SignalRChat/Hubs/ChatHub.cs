@@ -53,15 +53,15 @@ namespace SignalRChat
             GetSession(sessionId).CurrentActivity = newActivity;           
         }
 
-        public Session CreateSession(string suggestedId, string adminId)
+        public Session CreateSession(string suggestedFriendlyId, string adminConnectionId)
         {
             //set up id friendly
-            var idStringHelper = StringHelper.URLFriendly(suggestedId);
+            var idStringHelper = StringHelper.URLFriendly(suggestedFriendlyId);
             var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
             var idFriendly = Regex.Replace(idFriend, @"-", "");
             var res = new Session
             {
-                AdminConnectionId = adminId,
+                AdminConnectionId = adminConnectionId,
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
                 Id = idFriendly
             };
@@ -83,7 +83,9 @@ namespace SignalRChat
         public async Task SendNote(string sessionId, string name, string message)
         {
             //Call the addNewMessageToPage method to send message/notes  to compositeur
-            await Clients.Group(SessionService.Instance.GetAdminConnexionId(sessionId)).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+            var adminConnectionId = SessionService.Instance.GetSession(sessionId).AdminConnectionId;
+            var maestroClient = Clients.Client(adminConnectionId);
+            await maestroClient.addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
 
@@ -110,8 +112,10 @@ namespace SignalRChat
         {
 
             var adminId = Context.ConnectionId;
-            
-            return SessionService.Instance.CreateSession(suggestedId, adminId);
+
+            var res =  SessionService.Instance.CreateSession(suggestedId, adminId);
+            this.Groups.Add(this.Context.ConnectionId, res.Id);
+            return res;
         }
 
     }
