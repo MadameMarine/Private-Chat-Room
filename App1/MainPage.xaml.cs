@@ -105,6 +105,7 @@ namespace App1
             //await myProxy.Invoke("SendNote", checkResult.Id, idMaestro_, "connected");
 
             ButtonPriseDeNotes.IsEnabled = true;
+            ButtonCloseSession.IsEnabled = true;
         }
 
 
@@ -123,9 +124,17 @@ namespace App1
 
         }
 
-        private void CloseSession_Click(object sender, RoutedEventArgs e)
+   
+        //------------------------------WIP-------------------------------------------------
+        private async void ButtonCloseSession_Click(object sender, RoutedEventArgs e)
         {
+            string myTakingNotes = "closed";
+
+            //MAJ Current Activity
+            string groupId = stockIdGoodUnique.IdGoodUnique;
+            await myProxy.Invoke("StopActivity", groupId, myTakingNotes);
 
         }
     }
 }
+    
