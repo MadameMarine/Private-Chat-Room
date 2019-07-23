@@ -125,7 +125,6 @@ namespace App1
         }
 
    
-        //------------------------------WIP-------------------------------------------------
         private async void ButtonCloseSession_Click(object sender, RoutedEventArgs e)
         {
             string myTakingNotes = "closed";

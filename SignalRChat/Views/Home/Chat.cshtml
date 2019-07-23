@@ -19,7 +19,7 @@
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
         <input type="hidden" id="displayname" />
-        <ul id="messageSessionClosed">Sorry but there is no more activity !</ul>
+        <ul id="messageSessionClosed">No Activity in Progress</ul>
 
 
     </div>
@@ -70,15 +70,15 @@
                     var currentActivity = session.CurrentActivity;
                     console.log("joinsession return = " + currentActivity);
 
+                    $('#messageSessionClosed').show();
+
                     //If currentActivity has changed : display notes
                     if (currentActivity != null && currentActivity != "closed") {
                         handleStartingActivity(currentActivity);
                     }
-                    //---------------------------------------WIP----------------------
                     else {
                         handleStoppingActivity(currentActivity);
                     }
-                    //---------------------------------------WIP----------------------
 
                     // Set initial focus to message input box.
                     $('#message').focus();
@@ -92,9 +92,7 @@
 
 
             chat.client.startingActivity = handleStartingActivity;
-            //---------------------------------------WIP----------------------
             chat.client.stoppingActivity = handleStoppingActivity;
-            //---------------------------------------WIP----------------------
 
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (message) {
@@ -124,7 +122,6 @@
                     $('#sendmessage').hide();
 
                     $('#messageSessionClosed').show();
-                    //$('#messageSessionClosed').append('Sorry but there is no more activity !');
                 }
             }
                                           
