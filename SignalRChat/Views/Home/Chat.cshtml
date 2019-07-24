@@ -6,30 +6,32 @@
 
     </head>
     <body>
-        @*<img src="/images/logo_Compositeur_Digital.png">*@
+        <img src="https://www.compositeurdigital.com/wp/wp-content/uploads/2019/06/Logo-wordmark.png">
         <div class="container">
             <div class="col-lg-6">
 
-                <ul id="text_GroupName">@Model.Id</ul>
-                <ul id="text_UserNameDisplay"></ul>
-                <br />
+                <div class="DataSession">
+                    <h1 id="text_GroupName">@Model.Id</h1>
+                    <h2 id="text_UserNameDisplay"></h2>
+                </div>
 
-                <input type="text" id="textBox_UserName" />
-                <br />
-                <input type="button" id="Button_JoinGroup" value="Join Private Group" />
-                <br />
+                <div class="UserData">
+                    <input type="text" id="textBox_UserName" />
+                    <br />
+                    <input type="button" id="Button_JoinGroup" value="Join Private Group" />
+                    <br />
+                </div>
 
-                <ul id="text_MessageConnecting">Connecting...</ul>
-                <br />
-
+                <ul id="text_MessageConnecting">Connecting...</ul>             
                 <ul id="text_Connection"></ul>
-
                 <ul id="text_MessageSessionClosed">No Activity in Progress</ul>
 
-                <input type="text" id="textBox_Message" />
-                <br />
-                <input type="button" id="Button_Sendmessage" value="Send" />
-                <br />
+                <div class="UserMessage">
+                    <input type="text" id="textBox_Message" />
+                    <br />
+                    <input type="button" id="Button_Sendmessage" value="Send" />
+                    <br />
+                </div>
 
                 <ul id="text_MessageSending">Sending...</ul>
 
@@ -52,7 +54,7 @@
             $('#text_MessageSending').hide();
             $('#text_MessageConnecting').hide();
             $('#text_UserNameDisplay').hide();
-            $('#text_GroupName').hide();
+            $('#text_GroupName').show();
             $('#textBox_Message').hide();
             $('#Button_Sendmessage').hide();
             $('#text_MessageSessionClosed').hide();
@@ -113,8 +115,8 @@
                 });            
                
                 //Display in App1 when user is connected
-                //Pas nécessaire pour l'instant
-                @*chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), "connected");*@
+                //Pas nécessaire pour l'instant car pas de post-it
+                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), "connected");
 
                 //Display message connection on web page
                 $('#Button_Sendmessage').append('You are connected to @Model.Id  group');
