@@ -4,22 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SignalRChat
 {
-    ////-------WIP-------------------------------------
-    //public class UserConnection
-    //{
-    //    public string UserName { get; set; }
-    //}
-    ////-------WIP-------------------------------------
 
     public class Session
     {
-        ////-------WIP--------Créer une liste?-------------
-        //public List<UserConnection> UserName { get; set; }
-        ////-------WIP-------------------------------------
-
+        public string AdminConnectionId { get; set; } 
         public string PublicUrl { get; set; }
         public string Id { get; set; }
         public string CurrentActivity { get; set; }
@@ -47,47 +39,40 @@ namespace SignalRChat
                 Console.WriteLine(e);
             }
 
-            //return _stockSession[id];
             return _returnValue;
         }
 
+        public string GetAdminConnexionId(string sessionId)
+        {
+            return GetSession(sessionId).AdminConnectionId;
+        }
 
         public void UpdateCurrentActivity(string sessionId, string newActivity)
         {
             //Replace current activity by newActivity
-            GetSession(sessionId).CurrentActivity = newActivity;
-            
+            GetSession(sessionId).CurrentActivity = newActivity;           
         }
 
-        ////-------WIP-------------------------------------
-
-        //public void AddUserName(string sessionId, string UserName)
-        //{
-        //    //GetSession(sessionId).UserName = UserName; // à revoir 
-        //}
-        ////-------WIP-------------------------------------
-
-
-        public Session CreateSession(string suggestedId)
+        public Session CreateSession(string suggestedFriendlyId, string adminConnectionId)
         {
             //set up id friendly
-            var idStringHelper = StringHelper.URLFriendly(suggestedId);
+            var idStringHelper = StringHelper.URLFriendly(suggestedFriendlyId);
             var idFriend = Regex.Replace(idStringHelper, @"[^A-Za-z0-9'()\*\\+_~\:\/\?\-\.,;=#\[\]@!$&]", "");
             var idFriendly = Regex.Replace(idFriend, @"-", "");
             var res = new Session
             {
+                AdminConnectionId = adminConnectionId,
                 PublicUrl = "http://localhost:52527/Home/Chat/" + idFriendly,
-                Id = idFriendly,
+                Id = idFriendly
             };
 
             _stockSession[res.Id] = res;
             return res;
-
         }
+
     }
     public class ChatHub : Hub
     {
-
         public class ChatMessage
         {
             public string GroupChatId { get; set; }
@@ -97,14 +82,15 @@ namespace SignalRChat
 
         public async Task SendNote(string sessionId, string name, string message)
         {
-            //TODO: envoyer uniquement au compositeur, donc modifier le Group(sessionId)
-            //Call the addNewMessageToPage method to send message/notes
-            await Clients.Group(sessionId).addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
+            //Call the addNewMessageToPage method to send message/notes  to compositeur
+            var adminConnectionId = SessionService.Instance.GetSession(sessionId).AdminConnectionId;
+            var maestroClient = Clients.Client(adminConnectionId);
+            await maestroClient.addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
 
         }
 
-     
-        public async Task StartActivity(string sessionId, string newActivity)
+
+        public async Task StartActivity(string sessionId, string newActivity) 
         {
             //maj de Session dans sessionService: futurs join session s'initialisent avec activité courante     
             SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);            
@@ -113,32 +99,24 @@ namespace SignalRChat
             await Clients.Group(sessionId).startingActivity(newActivity);
            
         }
-
-
-        public Session JoinSession(string sessionId) //temporaire : j'ai ajouté le username   
+            
+        public Session JoinSession(string sessionId) 
         {
             this.Groups.Add(this.Context.ConnectionId, sessionId);
             return SessionService.Instance.GetSession(sessionId);
         }
+        
 
+   
+        public Session CreateSession(string suggestedId, string maestroConnexionId)
+        {
 
-        //public class TakingNotes
-        //{
-        //    public string Notes { get; set; }
-        //}
+            var adminId = Context.ConnectionId;
 
-        ////envoi autorisation au groupe
-        //public async Task SendNotes(string sessionId, string notes)
-        //{
-        //    await Clients.Group(sessionId).autorizeTakingNotes(new TakingNotes { Notes = notes});
-        //}
-
-
-        //supprime un utilisateur
-        //public Task LeaveRoom(string roomName)
-        //{
-        //    return Groups.Remove(Context.ConnectionId, roomName);
-        //}
+            var res =  SessionService.Instance.CreateSession(suggestedId, adminId);
+            this.Groups.Add(this.Context.ConnectionId, res.Id);
+            return res;
+        }
 
     }
 }

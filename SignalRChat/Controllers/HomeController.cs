@@ -43,18 +43,6 @@ namespace SignalRChat.Controllers
         {
             return View(new ChatEditViewModel() { Id = id});
         }
-
-        #region ActionControllers
-
-        [HttpGet]
-        public JsonResult CreateSession(string id)
-        {
-
-            var session = SessionService.Instance.CreateSession(id);
-           return Json(session, JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion
-
+       
     }
 }

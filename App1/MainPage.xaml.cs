@@ -31,12 +31,10 @@ namespace App1
         private IHubProxy myProxy;
         HttpClient httpClient = new HttpClient();
         private string baseUrl = "http://localhost:52527";
-        private string idMaextro_ = "Maextro_";
-        //@idUnivers: nom de l'univers
+        private string idMaestro_ = "Maestro_";
         private string idUnivers = "Monde";
         GetIdGoodUnique stockIdGoodUnique = new GetIdGoodUnique();
 
-        //Départ!
         public MainPage()
         {
             
@@ -71,6 +69,7 @@ namespace App1
 
         public class Session
         {
+            public string AdminConnectionId { get; set; }
             public string PublicUrl { get; set; }
             public string Id { get; set; }
             public string CurrentActivity { get; set; }
@@ -82,7 +81,6 @@ namespace App1
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
-                Console.WriteLine(idMaextro_ + " is connecting to server...");
                 await myHubConnection.Start(); 
 
             }
@@ -91,20 +89,20 @@ namespace App1
             var url = Regex.Replace(idUnivers, @"&", ""); ;
             var urlGood = Uri.EscapeDataString(url);
             var rng = new Random();
-            var idGoodUnique = urlGood + rng.Next(10, 99).ToString() + rng.Next(10, 99).ToString();           
+            var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
 
-            //Create Session
-            var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);    
-            var checkResult = JsonConvert.DeserializeObject<Session>(res);            
-            Console.WriteLine("url : " + checkResult);
+            //var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);
+
+            //Call Create Session
+            var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
+    
             TextUrl.Text = checkResult.PublicUrl;
             stockIdGoodUnique.IdGoodUnique = checkResult.Id;
 
             //Join la room            
-            Console.WriteLine(idMaextro_ + "joining group du compositeur...");
-            await myProxy.Invoke("JoinSession", checkResult.Id);        //temporaire : j'ai ajouté le username idMaextro    
-            await myProxy.Invoke("SendNote", checkResult.Id, idMaextro_, "connected");
-            Console.WriteLine(idMaextro_ + "group joined");
+            Console.WriteLine(idMaestro_ + "joining group du compositeur...");
+            await myProxy.Invoke("JoinSession", checkResult.Id);        
+            //await myProxy.Invoke("SendNote", checkResult.Id, idMaestro_, "connected");
 
             ButtonPriseDeNotes.IsEnabled = true;
         }
@@ -116,7 +114,6 @@ namespace App1
             //Connection to ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
-                Console.WriteLine(idMaextro_ + " is connecting to server...");
                 await myHubConnection.Start();
             }
 
