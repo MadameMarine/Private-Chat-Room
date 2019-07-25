@@ -2,6 +2,7 @@
     margin: 10px;
 }
 
+/*Message Box*/
 #textBox_Message {
     width: 200px;
     height: 200px;
@@ -9,19 +10,14 @@
     resize: none;
     background-color: #f8f8f8;
     border-radius: 1px;
+    border : white;
     box-sizing: border-box;
 }
 
-#textBox_UserName {
-    margin-bottom: 10px;
-    border-radius: 1px;
-}
-
-
+/*Area name Univers*/
 h1.title {
-    /*font-family: "Lucida Console", lucida, monospace;*/
-    font-family: Arial, Helvetica, sans-serif;
     /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
     letter-spacing: 2px;
     word-spacing: 2px;
@@ -33,10 +29,10 @@ h1.title {
     text-transform: capitalize;
 }
 
+/*Area Username*/
 h2.title {
-    /*font-family: "Lucida Console", lucida, monospace;*/
-    font-family: Arial, Helvetica, sans-serif;
     /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
     letter-spacing: 2px;
     word-spacing: 2px;
@@ -48,46 +44,13 @@ h2.title {
     text-transform: lowercase;
 }
 
-ul.information {
-    /*font-family: "Lucida Console", lucida, monospace;*/
-    font-family: Arial, Helvetica, sans-serif;
-    color: #BBBBBB;
+/*Username Box*/
+#textBox_UserName {
+    margin-bottom: 10px;
+    border-radius: 1px;
 }
 
-.button {
-    background-color: #ff9999;
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    /*display: inlixne-block;*/
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    -webkit-transition-duration: 0.1s; /* Safari */
-    transition-duration: 0.1s;
-    border-radius: 2px;
-}
-
-    .button:hover {
-        background-color: #ffe6e6;
-        color: #ff6666;
-    }
-
-.informations{
-    /*TODO : Aligner les élements avec le reste des blocs*/
-}
-
-/*Centre tous les éléments*/
-div.col-lg-6 {
-    max-width: 500px;
-    margin: auto;
-    background: white;
-    padding: 10px;
-}
-
-/*TexteBox username*/
+/*TextBox username*/
 input[type=text], select {
     width: 100%;
     padding: 12px 20px;
@@ -97,3 +60,45 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+/*Informations*/
+ul.information {
+    /*font-family: "Lucida Console", lucida, monospace;*/
+    font-family: Arial, Helvetica, sans-serif;
+    color: #BBBBBB;
+}
+
+/*Buttons Join command Send*/
+.button {
+    background-color: #ff9999;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.1s; 
+    transition-duration: 0.1s;
+    border-radius: 2px;
+}
+
+.button:hover {
+    background-color: #ffe6e6;
+    color: #ff6666;
+}
+
+.informations{
+    /*TODO : Aligner les élements avec le reste des blocs*/
+}
+
+
+/*Centre tous les éléments*/
+div.col-lg-6 {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 10px;
+}
+
