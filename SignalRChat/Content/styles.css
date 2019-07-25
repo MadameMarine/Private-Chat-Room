@@ -18,30 +18,82 @@
 }
 
 
+h1.title {
+    /*font-family: "Lucida Console", lucida, monospace;*/
+    font-family: Arial, Helvetica, sans-serif;
+    /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
+    font-size: 25px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+    color: #000000;
+    font-weight: 700;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: small-caps;
+    text-transform: capitalize;
+}
+
+h2.title {
+    /*font-family: "Lucida Console", lucida, monospace;*/
+    font-family: Arial, Helvetica, sans-serif;
+    /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
+    font-size: 25px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+    color: #6B6B6B;
+    font-weight: 400;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
+ul.information {
+    /*font-family: "Lucida Console", lucida, monospace;*/
+    font-family: Arial, Helvetica, sans-serif;
+    color: #BBBBBB;
+}
+
 .button {
-    background-color: #ff8989; /*Pink*/
+    background-color: #ff9999;
     border: none;
     color: white;
     padding: 10px 15px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    /*display: inlixne-block;*/
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    border-radius: 2px;
 }
 
-.button1:hover {
-   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    .button:hover {
+        background-color: #ffe6e6;
+        color: #ff6666;
+    }
+
+.informations{
+    /*TODO : Aligner les élements avec le reste des blocs*/
 }
 
-
-h1.title {
-    font-family: "Lucida Console", lucida, monospace;
+/*Centre tous les éléments*/
+div.col-lg-6 {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 10px;
 }
 
-ul.information {
-    font-family: "Lucida Console", lucida, monospace;
+/*TexteBox username*/
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
