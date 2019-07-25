@@ -10,29 +10,32 @@
             <div class="col-lg-6">
 
                 <div class="DataSession">
-                    <h1 id="text_GroupName">@Model.Id</h1>
-                    <h2 id="text_UserNameDisplay"></h2>
+                    <h1 class = "title" id="text_GroupName">@Model.Id</h1>
+                    <h2 class = "title" id="text_UserNameDisplay"></h2>
                 </div>
 
                 <div class="UserData">
                     <input type="text" id="textBox_UserName" />
                     <br />
-                    <input type="button" id="Button_JoinGroup" value="Join Private Group" />
+                    @*<input type="button" id="Button_JoinGroup" value="Join Private Group" />*@
+                <button class="button button1" id="Button_JoinGroup">Join Private Group</button>
                     <br />
                 </div>
 
-                <ul id="text_MessageConnecting">Connecting...</ul>             
-                <ul id="text_Connection"></ul>
-                <ul id="text_MessageSessionClosed">No Activity in Progress</ul>
+                <ul class = "information" id="text_MessageConnecting">Connecting...</ul>             
+                <ul class = "information" id="text_Connection"></ul>
+                <ul class = "information" id="text_MessageSessionClosed">No Activity in Progress</ul>
 
                 <div class="UserMessage">
-                    <input type="text" id="textBox_Message" />
+                    <textarea type="text" id="textBox_Message"></textarea>
                     <br />
-                    <input type="button" id="Button_Sendmessage" value="Send" />
-                    <br />
+                    @*<input type="button" id="Button_Sendmessage" value="Send" />*@
+                    <button class="button button1" id="Button_Sendmessage">Send</button>
+
+                    
                 </div>
 
-                <ul id="text_MessageSending">Sending...</ul>
+                <ul class = "information" id="text_MessageSending">Sending...</ul>
 
                 @*<input type="hidden" id="displayname" /> TODO : A EFFACER SI TOUT FONCTIONNE*@
 
@@ -118,7 +121,7 @@
                 chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), "connected");
 
                 //Display message connection on web page
-                $('#Button_Sendmessage').append('You are connected to @Model.Id  group');
+                $('#text_Connection').append('You are connected to @Model.Id  group');
             });
 
 
