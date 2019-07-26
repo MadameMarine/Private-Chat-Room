@@ -14,6 +14,21 @@
         <Button x:Name="ButtonAskConnection" Content="Note Storm" Margin="78,0,0,0" Height="51" Width="144" Click="ButtonAskConnection_Click"/>
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="375,157,0,0" VerticalAlignment="Top" Height="50" Width="425" IsEnabled="False"/>
         <Button x:Name="ButtonCloseSession" Content="Close" Margin="827,157,0,0" VerticalAlignment="Top" Height="50" Width="100" IsEnabled="False" Click="ButtonCloseSession_Click"/>
-
+        <ListView x:Name="MessagesList"
+          ScrollViewer.HorizontalScrollMode="Enabled" 
+          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+          ScrollViewer.VerticalScrollMode="Disabled"
+          ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="305,260,305,10">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <x:String>Item 1</x:String>
+            <x:String>Item 2</x:String>
+            <x:String>Item 3</x:String>
+            <x:String>Item 4</x:String>
+            <x:String>Item 5</x:String>
+        </ListView>
     </Grid>
 </Page>

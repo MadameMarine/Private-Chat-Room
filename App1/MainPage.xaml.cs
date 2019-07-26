@@ -48,19 +48,19 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
-            //TODO : A decommenter quand on saura comment écrire message sur post-it /!\
- 
+            var messages = "";
+
             //Get informations from browser
-            //myProxy.On("addNewMessageToPage", message =>
-            //{
-            //    _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            //    {
+            myProxy.On("addNewMessageToPage", message =>
+            {
+                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
 
-            //        messages.Text += message.Name + ": " + message.Message;
+                    messages = message.Name + ": " + message.Message;
+                    MessagesList.Items.Add(messages);
+                });
+            });
 
-            //    });
-            //});
-           
         }
 
         public  class GetIdGoodUnique
@@ -133,7 +133,19 @@ namespace App1
             string groupId = stockIdGoodUnique.IdGoodUnique;
             await myProxy.Invoke("StopActivity", groupId, myTakingNotes);
 
-        }     
+        }
+
+        private async void DisplayNoWifiDialog(string title, string content)
+        {
+            ContentDialog noWifiDialog = new ContentDialog()
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "Ok"
+            };
+
+            await noWifiDialog.ShowAsync();
+        }
     }
 }
     
