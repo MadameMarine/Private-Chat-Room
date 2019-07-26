@@ -4,48 +4,51 @@
 
 /*Message Box*/
 #textBox_Message {
+    outline: 0;
     width: 200px;
     height: 200px;
     margin-bottom: 10px;
     resize: none;
     background-color: #f8f8f8;
     border-radius: 1px;
-    border : white;
+    border: white;
     box-sizing: border-box;
 }
 
 /*Area name Univers*/
-h1.title {
+h1, h2 {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    font-style: normal;
+}
+
+h1 {
     /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
-    font-family: Arial, Helvetica, sans-serif;
+  
     font-size: 25px;
     letter-spacing: 2px;
     word-spacing: 2px;
     color: #000000;
-    font-weight: 700;
-    text-decoration: none;
-    font-style: normal;
+    font-weight: lighter;
     font-variant: small-caps;
     text-transform: capitalize;
 }
 
 /*Area Username*/
-h2.title {
+h2 {
     /*font-family: "Nunito Sans",Helvetica,Arial,Lucida,sans-serif;*/
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
     letter-spacing: 2px;
     word-spacing: 2px;
     color: #6B6B6B;
     font-weight: 400;
-    text-decoration: none;
-    font-style: normal;
     font-variant: small-caps;
     text-transform: lowercase;
 }
 
 /*Username Box*/
 #textBox_UserName {
+    outline: 0;
     margin-bottom: 10px;
     border-radius: 1px;
 }
@@ -70,6 +73,7 @@ ul.information {
 
 /*Buttons Join command Send*/
 .button {
+    outline: 0;
     background-color: #ff9999;
     border: none;
     color: white;
@@ -79,7 +83,7 @@ ul.information {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    -webkit-transition-duration: 0.1s; 
+    -webkit-transition-duration: 0.1s;
     transition-duration: 0.1s;
     border-radius: 2px;
 }
@@ -87,10 +91,6 @@ ul.information {
 .button:hover {
     background-color: #ffe6e6;
     color: #ff6666;
-}
-
-.informations{
-    /*TODO : Aligner les élements avec le reste des blocs*/
 }
 
 

@@ -5,18 +5,19 @@
         <link href="@Url.Content("~/Content/styles.css")" rel="stylesheet" type="text/css">
     </head>
     <body>
+
         <div class="container">
+
             <div class="col-lg-6">
 
                 <div class="dataSession">
                     <img src="https://www.compositeurdigital.com/wp/wp-content/uploads/2019/06/Logo-wordmark.png" id="logo">
-                    <h1 class="title" id="text_GroupName">@Model.Id</h1>
-                    <h2 class="title" id="text_UserNameDisplay"></h2>
+                    <h1 id="text_GroupName">@Model.Id</h1>
+                    <h2 id="text_UserNameDisplay"></h2>
                 </div>
 
                 <div class="userData">
                     <input type="text" placeholder="Name" id="textBox_UserName" /><br>
-                    @*<input type="button" id="Button_JoinGroup" value="Join Private Group" />*@
                     <button class="button button1" id="Button_JoinGroup">Join</button>
                 </div>
 
@@ -28,14 +29,14 @@
 
                 <div class="userMessage">
                     <textarea type="text"  id="textBox_Message" fo></textarea><br>
-                    @*<input type="button" id="Button_Sendmessage" value="Send" />*@
                     <button class="button button1" id="Button_Sendmessage">Send</button>
                     <ul class="information" id="text_MessageSending">Sending...</ul>
                 </div>
 
-                @*<input type="hidden" id="displayname" /> TODO : A EFFACER SI TOUT FONCTIONNE*@
             </div>
+
         </div>
+
     </body>
 
 @section scripts {
