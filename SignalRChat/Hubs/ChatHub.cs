@@ -99,7 +99,17 @@ namespace SignalRChat
             await Clients.Group(sessionId).startingActivity(newActivity);
            
         }
-            
+
+        public async Task StopActivity(string sessionId, string newActivity)
+        {
+            //maj de Session dans sessionService: futurs join session s'initialisent avec activité courante     
+            SessionService.Instance.UpdateCurrentActivity(sessionId, newActivity);
+
+            //appelle les clients pour stoppper l'activité en cours
+            await Clients.Group(sessionId).stoppingActivity(newActivity);
+
+        }
+
         public Session JoinSession(string sessionId) 
         {
             this.Groups.Add(this.Context.ConnectionId, sessionId);
@@ -118,5 +128,7 @@ namespace SignalRChat
             return res;
         }
 
+        
+    
     }
 }
