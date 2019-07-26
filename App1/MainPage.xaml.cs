@@ -88,31 +88,40 @@ namespace App1
 
             }
 
+            if (TextUrl.Text == "")
+            {
+                TextUrl.Text = "Creating...";
 
-            TextUrl.Text = "Creating...";
-
-            //Create unique id url
-            var url = Regex.Replace(idUnivers, @"&", ""); ;
-            var urlGood = Uri.EscapeDataString(url);
-            var rng = new Random();
-            var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
+                //Create unique id url
+                var url = Regex.Replace(idUnivers, @"&", ""); ;
+                var urlGood = Uri.EscapeDataString(url);
+                var rng = new Random();
+                var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
 
 
-            //Call CreateSession
-            var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
-    
-            TextUrl.Text = checkResult.PublicUrl;
-            stockIdGoodUnique.IdGoodUnique = checkResult.Id;
+                //Call CreateSession
+                var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
 
-            //Join room            
-            Console.WriteLine(idMaestro_ + "joining group du compositeur...");
-            await myProxy.Invoke("JoinSession", checkResult.Id);                   
+                TextUrl.Text = checkResult.PublicUrl;
+                stockIdGoodUnique.IdGoodUnique = checkResult.Id;
 
-            //MAJ Current Activity - Start Activity
-            string groupId = stockIdGoodUnique.IdGoodUnique;
-            await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
+                //Join room            
+                Console.WriteLine(idMaestro_ + "joining group du compositeur...");
+                await myProxy.Invoke("JoinSession", checkResult.Id);
 
-            ButtonCloseSession.IsEnabled = true;
+                //MAJ Current Activity - Start Activity
+                string groupId = stockIdGoodUnique.IdGoodUnique;
+                await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
+
+                ButtonCloseSession.IsEnabled = true;
+            }
+            else
+            {
+                //MAJ Current Activity - Start Activity
+                string groupId = stockIdGoodUnique.IdGoodUnique;
+                await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
+            }
+
         }
 
         
