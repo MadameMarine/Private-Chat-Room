@@ -66,14 +66,22 @@
             var chat = $.connection.chatHub;
 
             //Send Message to App1
-             $('#Button_Sendmessage').click(function () {
-                    // Call the Send method on the hub.
-                    chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#textBox_Message').val('').focus();
-             });
+            $('#Button_Sendmessage').click(function () {
+                // Call the Send method on the hub.
+                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val());
+                // Clear text box and reset focus for next comment.
+                $('#textBox_Message').val('').focus();
+            });
 
-            //Join Session
+
+            //Join Session     
+            $(document).ready(function(){
+                $('#textBox_UserName').keypress(function(e){
+                    if(e.keyCode==13)
+                        $('#Button_JoinGroup').click();
+                });
+            });
+
             $('#Button_JoinGroup').click(function () {
                 //$('#Button_JoinGroup').prop('disabled', true);
                 //$('#textBox_UserName').prop('disabled', true);
