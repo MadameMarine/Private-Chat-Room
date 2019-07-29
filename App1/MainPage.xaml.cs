@@ -58,6 +58,8 @@ namespace App1
 
                     messages = message.Name + ": " + message.Message;
                     MessagesList.Items.Add(messages);
+                    //MessagesList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    //MessagesList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 });
             });
 
