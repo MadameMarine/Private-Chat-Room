@@ -14,17 +14,23 @@
         <Button x:Name="ButtonAskConnection" Content="Note Storm" Margin="78,0,0,0" Height="51" Width="144" Click="ButtonAskConnection_Click"/>
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="375,157,0,0" VerticalAlignment="Top" Height="50" Width="425" IsEnabled="False"/>
         <Button x:Name="ButtonCloseSession" Content="Close" Margin="827,157,0,0" VerticalAlignment="Top" Height="50" Width="100" IsEnabled="False" Click="ButtonCloseSession_Click"/>
-        <ListView x:Name="MessagesList"
-          ScrollViewer.HorizontalScrollMode="Enabled" 
-          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-          ScrollViewer.VerticalScrollMode="Disabled"
-          ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="305,260,305,10">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
+        <ListView x:Name="MessagesList" Margin="375,256,90,120">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="47"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind}" Foreground="Teal" 
+                           FontSize="14" Grid.Column="1" TextWrapping="Wrap"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <x:String>Item 1</x:String>
             
         </ListView>
     </Grid>
+    
+    
 </Page>
