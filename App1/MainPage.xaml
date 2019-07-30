@@ -8,14 +8,12 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid RenderTransformOrigin="0.455,0.529">
         <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Button x:Name="ButtonAskConnection" Content="..." Margin="28,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.742,-1.125" Click="ButtonAskConnection_Click"/>
-        <TextBox HorizontalAlignment="Left" Margin="78,20,0,0" Text="Ouvrir une session collaborative" VerticalAlignment="Top" Width="216" IsEnabled="False"/>
-        <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="28,85,0,0" Text="" VerticalAlignment="Top" Width="396" IsEnabled="False"/>
-        <TextBox x:Name="messages" IsEnabled="False" RenderTransformOrigin="-0.211,0.58" Margin="28,320,705,329" />
-        <Button x:Name="ButtonPriseDeNotes" Content="Débuter prise de notes" Margin="28,176,0,0" VerticalAlignment="Top" Width="198" IsEnabled="False" Click="ButtonPriseDeNotes_Click"/>
-        <Button x:Name="ButtonCloseSession"  Content="Close Session" Margin="28,702,0,0" VerticalAlignment="Top" RenderTransformOrigin="-6.388,2.992" Height="37" Width="198" IsEnabled="False" Click="ButtonCloseSession_Click"/>
+        <Grid HorizontalAlignment="Left" Height="1000" VerticalAlignment="Center" Width="300"/>
+        <Button x:Name="ButtonAskConnection" Content="Note Storm" Margin="78,0,0,0" Height="51" Width="144" Click="ButtonAskConnection_Click"/>
+        <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="375,157,0,0" VerticalAlignment="Top" Height="50" Width="425" IsEnabled="False"/>
+        <Button x:Name="ButtonCloseSession" Content="Close" Margin="827,157,0,0" VerticalAlignment="Top" Height="50" Width="100" IsEnabled="False" Click="ButtonCloseSession_Click"/>
 
     </Grid>
 </Page>

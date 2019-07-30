@@ -1,29 +1,44 @@
 ﻿@{
     ViewBag.Title = "Chat";
 }
+    <head>
+        <link href="@Url.Content("~/Content/styles.css")" rel="stylesheet" type="text/css">
+    </head>
+    <body>
 
-<h1>Chat</h1>
-<h2>Groupe Chat: @Model.Id</h2>
+        <div class="container">
 
-<div class="container">
-    <div class="col-lg-6">
-        @*provisoire*@
-        <ul id="idUrl"></ul>
-        @*provisoire*@
-        <label for="TextUser">User..........</label>
-        <input type="text" id="userName" />
-        <input type="button" id="joinGroup" value="Join Private Group" />
-        <br />
-        <ul id="connection"></ul>
-        <label for="TextMessage" id="textmessage">Message...</label>
-        <input type="text" id="message" />
-        <input type="button" id="sendmessage" value="Send" />
-        <input type="hidden" id="displayname" />
-        <ul id="messageSessionClosed">No Activity in Progress</ul>
+            <div class="col-lg-6">
 
+                <div class="dataSession">
+                    <img src="https://www.compositeurdigital.com/wp/wp-content/uploads/2019/06/Logo-wordmark.png" id="logo">
+                    <h1 id="text_GroupName">@Model.Id</h1>
+                    <h2 id="text_UserNameDisplay"></h2>
+                </div>
 
-    </div>
-</div>
+                <div class="userData">
+                    <input type="text" placeholder="Name" id="textBox_UserName" /><br>
+                    <button class="button button1" id="Button_JoinGroup">Join</button>
+                </div>
+
+                <div class="informations">
+                    <ul class="information" id="text_MessageConnecting">Connecting...</ul>
+                    <ul class="information" id="text_Connection"></ul>
+                    <ul class="information" id="text_MessageSessionClosed">No activity in progress</ul>
+                </div>
+
+                <div class="userMessage">
+                    <textarea type="text"  id="textBox_Message" fo></textarea><br>
+                    <button class="button button1" id="Button_Sendmessage">Send</button>
+                    <ul class="information" id="text_MessageSending">Sending...</ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+
 @section scripts {
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
@@ -34,35 +49,46 @@
     <!--Hide message box and send button-->
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#textmessage').hide();
-            $('#message').hide();
-            $('#sendmessage').hide();
-            $('#messageSessionClosed').hide();
+            $('#text_MessageSending').hide();
+            $('#text_MessageConnecting').hide();
+            $('#text_UserNameDisplay').hide();
+            $('#text_GroupName').show();
+            $('#textBox_Message').hide();
+            $('#Button_Sendmessage').hide();
+            $('#text_MessageSessionClosed').hide();
         });
     </script>
     <!--SignalR script to update the chat page and send messages.-->
     <script>
         $(function () {
-            var userName = '';
+            var textBox_UserName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
-            var idUrl = ''; 
 
             //Send Message to App1
-             $('#sendmessage').click(function () {
+             $('#Button_Sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.sendNote('@Model.Id', $('#userName').val(), $('#message').val());
+                    chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val());
                     // Clear text box and reset focus for next comment.
-                    $('#message').val('').focus();
+                    $('#textBox_Message').val('').focus();
              });
 
             //Join Session
-            $('#joinGroup').click(function () {
-                $('#joinGroup').prop('disabled', true);
-                $('#userName').prop('disabled', true);
+            $('#Button_JoinGroup').click(function () {
+                //$('#Button_JoinGroup').prop('disabled', true);
+                //$('#textBox_UserName').prop('disabled', true);
 
-                //connection to chathub
-                console.log('joining session @Model.Id...');
+                $('#Button_JoinGroup').hide();
+                $('#textBox_UserName').hide();
+
+                //Display UserName when user join group
+                $('#text_UserNameDisplay').append($('#textBox_UserName').val());
+                $('#text_UserNameDisplay').show();
+
+                //Alert user when joining session
+                //$('text_MessageConnecting').show();
+
+               
                 chat.server.joinSession('@Model.Id').done(function (session) {
                     console.log('user connected to session  @Model.Id');
 
@@ -70,7 +96,9 @@
                     var currentActivity = session.CurrentActivity;
                     console.log("joinsession return = " + currentActivity);
 
-                    $('#messageSessionClosed').show();
+                    //User is connected 
+                    $('text_MessageConnecting').hide();
+
 
                     //If currentActivity has changed : display notes
                     if (currentActivity != null && currentActivity != "closed") {
@@ -81,13 +109,15 @@
                     }
 
                     // Set initial focus to message input box.
-                    $('#message').focus();
+                    $('#textBox_Message').focus();
                 });            
                
                 //Display in App1 when user is connected
-                chat.server.sendNote('@Model.Id', $('#userName').val(), "connected");
+                //Pas nécessaire pour l'instant car pas de post-it
+                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), "connected");
+
                 //Display message connection on web page
-                $('#connection').append('You are connected to @Model.Id  group');
+                $('#text_Connection').append('You are connected to @Model.Id  group');
             });
 
 
@@ -105,11 +135,11 @@
                 console.log('startActivity :' + newActivity); 
 
                 if (newActivity == 'TakingNotes') {
-                    $('#textmessage').show();
-                    $('#message').show();
-                    $('#sendmessage').show();
+                    //$('#textmessage').show();
+                    $('#textBox_Message').show();
+                    $('#Button_Sendmessage').show();
 
-                    $('#messageSessionClosed').hide();
+                    $('#text_MessageSessionClosed').hide();
                 }
             }   
 
@@ -117,11 +147,11 @@
                 console.log('stopping activity = ' + newActivity);
 
                  if (newActivity == 'closed') {
-                    $('#textmessage').hide();
-                    $('#message').hide();
-                    $('#sendmessage').hide();
+                    //$('#textmessage').hide();
+                    $('#textBox_Message').hide();
+                    $('#Button_Sendmessage').hide();
 
-                    $('#messageSessionClosed').show();
+                    $('#text_MessageSessionClosed').show();
                 }
             }
                                           

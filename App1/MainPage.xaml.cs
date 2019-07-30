@@ -48,17 +48,18 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
-          
+            //TODO : A decommenter quand on saura comment écrire message sur post-it /!\
+ 
             //Get informations from browser
-            myProxy.On("addNewMessageToPage", message =>
-            {
-                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
+            //myProxy.On("addNewMessageToPage", message =>
+            //{
+            //    _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //    {
 
-                    messages.Text += message.Name + ": " + message.Message;
+            //        messages.Text += message.Name + ": " + message.Message;
 
-                });
-            });
+            //    });
+            //});
            
         }
 
@@ -78,6 +79,8 @@ namespace App1
 
         private async void ButtonAskConnection_Click(object sender, RoutedEventArgs e)
         {
+            string myTakingNotes = "TakingNotes";
+
             //Connection au ChatHub
             if (myHubConnection.State != ConnectionState.Connected)
             {
@@ -85,46 +88,43 @@ namespace App1
 
             }
 
-            //Create unique id url
-            var url = Regex.Replace(idUnivers, @"&", ""); ;
-            var urlGood = Uri.EscapeDataString(url);
-            var rng = new Random();
-            var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
-
-            //var res = await httpClient.GetStringAsync(baseUrl + "/Home/CreateSession/" + idGoodUnique);
-
-            //Call Create Session
-            var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
-    
-            TextUrl.Text = checkResult.PublicUrl;
-            stockIdGoodUnique.IdGoodUnique = checkResult.Id;
-
-            //Join la room            
-            Console.WriteLine(idMaestro_ + "joining group du compositeur...");
-            await myProxy.Invoke("JoinSession", checkResult.Id);        
-            //await myProxy.Invoke("SendNote", checkResult.Id, idMaestro_, "connected");
-
-            ButtonPriseDeNotes.IsEnabled = true;
-            ButtonCloseSession.IsEnabled = true;
-        }
-
-
-        private  async void ButtonPriseDeNotes_Click(object sender, RoutedEventArgs e)
-        {
-            string myTakingNotes = "TakingNotes";
-            //Connection to ChatHub
-            if (myHubConnection.State != ConnectionState.Connected)
+            if (TextUrl.Text == "")
             {
-                await myHubConnection.Start();
+                TextUrl.Text = "Creating...";
+
+                //Create unique id url
+                var url = Regex.Replace(idUnivers, @"&", ""); ;
+                var urlGood = Uri.EscapeDataString(url);
+                var rng = new Random();
+                var idGoodUnique = urlGood + rng.Next(10, 99).ToString();
+
+
+                //Call CreateSession
+                var checkResult = await myProxy.Invoke<Session>("CreateSession", idGoodUnique, idMaestro_);
+
+                TextUrl.Text = checkResult.PublicUrl;
+                stockIdGoodUnique.IdGoodUnique = checkResult.Id;
+
+                //Join room            
+                Console.WriteLine(idMaestro_ + "joining group du compositeur...");
+                await myProxy.Invoke("JoinSession", checkResult.Id);
+
+                //MAJ Current Activity - Start Activity
+                string groupId = stockIdGoodUnique.IdGoodUnique;
+                await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
+
+                ButtonCloseSession.IsEnabled = true;
+            }
+            else
+            {
+                //MAJ Current Activity - Start Activity
+                string groupId = stockIdGoodUnique.IdGoodUnique;
+                await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
             }
 
-            //MAJ Current Activity
-            string groupId = stockIdGoodUnique.IdGoodUnique;
-            await myProxy.Invoke("StartActivity", groupId, myTakingNotes);
-
         }
 
-   
+        
         private async void ButtonCloseSession_Click(object sender, RoutedEventArgs e)
         {
             string myTakingNotes = "closed";
@@ -133,7 +133,7 @@ namespace App1
             string groupId = stockIdGoodUnique.IdGoodUnique;
             await myProxy.Invoke("StopActivity", groupId, myTakingNotes);
 
-        }
+        }     
     }
 }
     
