@@ -55,7 +55,7 @@ namespace App1
             var username = "";
             var messages = "";
 
-            string[] backgroundColor = new string[] { "Yellow", "Orange", "Green" , "Blue", "Pink"};
+            string[] backgroundColor = new string[] { "LightYellow", "Coral", "LightGreen" , "LightCyan", "LightSalmon" };
             string color = "";
             int cont = 0;
 
@@ -67,8 +67,6 @@ namespace App1
 
                     username = message.Name;
                     messages = message.Message;
-
-
 
                     if (cont >= backgroundColor.Length)
                     {
@@ -84,10 +82,8 @@ namespace App1
                             color = dataList[i].MyBackground;
                             cont--;
                             break;
-                        }    
-                        
+                        }                            
                     }
-
 
                     dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
 
