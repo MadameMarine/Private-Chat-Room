@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -48,6 +50,9 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
+            ObservableCollection<UserData> dataList = new ObservableCollection<UserData>();
+
+            var username = "";
             var messages = "";
 
             //Get informations from browser
@@ -56,14 +61,18 @@ namespace App1
                 _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
 
-                    messages = message.Name + ": " + message.Message;
-                    MessagesList.Items.Add(messages);
-                    //MessagesList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    //MessagesList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                    username = message.Name;
+                    messages = message.Message;
+
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages });
+
                 });
             });
 
+            MessagesList.ItemsSource = dataList;
+
         }
+
 
         public  class GetIdGoodUnique
         {

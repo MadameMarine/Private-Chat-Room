@@ -17,19 +17,22 @@
         <ListView x:Name="MessagesList" Margin="375,256,50,50">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="x:String">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="47"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Text="{x:Bind}" Foreground="Teal" 
-                           FontSize="14" Grid.Column="1" TextWrapping="Wrap"/>
+                    <Grid Width="100" Height="100" Background="Yellow" Margin="8">
+                        <StackPanel>
+                            <TextBlock Text="{Binding MyUsername}" Foreground= "Black"
+                                   FontSize="10" />
+                            <TextBlock Text="{Binding MyMessage}" Foreground="Teal"
+                                   FontSize="14" Margin="2"
+                                   Grid.Column="1" TextWrapping="Wrap"/>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <!--<x:String>Item 1</x:String>-->
-            
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
         </ListView>
     </Grid>
     
