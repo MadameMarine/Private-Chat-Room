@@ -51,9 +51,13 @@ namespace App1
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
             ObservableCollection<UserData> dataList = new ObservableCollection<UserData>();
-
+   
             var username = "";
             var messages = "";
+
+            string[] backgroundColor = new string[] { "Yellow", "Orange", "Green" , "Blue", "Pink"};
+            string color = "";
+            int cont = 0;
 
             //Get informations from browser
             myProxy.On("addNewMessageToPage", message =>
@@ -64,7 +68,30 @@ namespace App1
                     username = message.Name;
                     messages = message.Message;
 
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages });
+
+
+                    if (cont >= backgroundColor.Length)
+                    {
+                        cont = 0;
+                    }
+
+                    color = backgroundColor[cont]; //initialisation to "Yellow"
+
+                    for (int i = 0; i < dataList.Count; i++)
+                    {
+                        if(username == dataList[i].MyUsername)
+                        {
+                            color = dataList[i].MyBackground;
+                            cont--;
+                            break;
+                        }    
+                        
+                    }
+
+
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
+
+                    cont++;
 
                 });
             });

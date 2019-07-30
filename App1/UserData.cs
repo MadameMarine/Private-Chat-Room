@@ -12,5 +12,7 @@ namespace App1
 
         public string MyMessage { get; set; }
 
+        public string MyBackground{ get; set; }
+
     }
 }
