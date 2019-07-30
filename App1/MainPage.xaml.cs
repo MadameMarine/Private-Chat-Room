@@ -96,6 +96,11 @@ namespace App1
 
         }
 
+        class GetColorbackground
+        {
+            public string ColorBackground { get; set; }
+        }
+
 
         public  class GetIdGoodUnique
         {
