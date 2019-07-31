@@ -64,11 +64,13 @@
             var textBox_UserName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
+            var colors = ['Gold', 'Orange', 'LawnGreen', 'DeepSkyBlue', 'LightPink'];
+            var participantId = "";
 
             //Send Message to App1
             $('#Button_Sendmessage').click(function () {
                 // Call the Send method on the hub.
-                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val());
+                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val(), participantId);
                 // Clear text box and reset focus for next comment.
                 $('#textBox_Message').val('').focus();
             });
@@ -83,9 +85,7 @@
             });
 
             $('#Button_JoinGroup').click(function () {
-                //$('#Button_JoinGroup').prop('disabled', true);
-                //$('#textBox_UserName').prop('disabled', true);
-
+                
                 $('#Button_JoinGroup').hide();
                 $('#textBox_UserName').hide();
 
@@ -133,8 +133,8 @@
             chat.client.stoppingActivity = handleStoppingActivity;
 
             // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (message) {
-                console.log( message.Name + ' ' + message.Message);
+            chat.client.sendingNote = function (message) {
+                console.log( message.Name + ' ' + message.Message + 'id user = ' + message.participatId);
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
@@ -166,7 +166,9 @@
             //go!
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
-
+                //participantId = $.connection.hub.id
+                console.log($.connection.hub.id);
+                participantId = $.connection.hub.id;
             });
         });
 

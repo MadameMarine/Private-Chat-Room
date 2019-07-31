@@ -55,12 +55,12 @@ namespace App1
             var username = "";
             var messages = "";
 
-            string[] backgroundColor = new string[] { "LightYellow", "Coral", "LightGreen" , "LightCyan", "LightSalmon" };
+            string[] backgroundColor = new string[] { "Gold", "Orange", "LawnGreen", "DeepSkyBlue", "LightPink" };
             string color = "";
             int cont = 0;
 
             //Get informations from browser
-            myProxy.On("addNewMessageToPage", message =>
+            myProxy.On("sendingNote", message =>
             {
                 _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
@@ -68,6 +68,7 @@ namespace App1
                     username = message.Name;
                     messages = message.Message;
 
+                    //This is a loop of colors
                     if (cont >= backgroundColor.Length)
                     {
                         cont = 0;
@@ -75,6 +76,7 @@ namespace App1
 
                     color = backgroundColor[cont]; //initialisation to "Yellow"
 
+                    //if an user have already a color 
                     for (int i = 0; i < dataList.Count; i++)
                     {
                         if(username == dataList[i].MyUsername)
@@ -86,7 +88,7 @@ namespace App1
                     }
 
                     dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
-
+                    
                     cont++;
 
                 });
@@ -94,12 +96,14 @@ namespace App1
 
             MessagesList.ItemsSource = dataList;
 
+
+
         }
 
-        class GetColorbackground
-        {
-            public string ColorBackground { get; set; }
-        }
+        //public class GetColorbackground
+        //{
+        //    public string ColorBackground { get; set; }
+        //}
 
 
         public  class GetIdGoodUnique
@@ -174,17 +178,7 @@ namespace App1
 
         }
 
-        private async void DisplayNoWifiDialog(string title, string content)
-        {
-            ContentDialog noWifiDialog = new ContentDialog()
-            {
-                Title = title,
-                Content = content,
-                CloseButtonText = "Ok"
-            };
-
-            await noWifiDialog.ShowAsync();
-        }
+       
     }
 }
     
