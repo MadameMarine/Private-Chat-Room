@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -48,20 +50,52 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
-            //TODO : A decommenter quand on saura comment écrire message sur post-it /!\
- 
+            ObservableCollection<UserData> dataList = new ObservableCollection<UserData>();
+   
+            var username = "";
+            var messages = "";
+
+            string[] backgroundColor = new string[] { "LightYellow", "Coral", "LightGreen" , "LightCyan", "LightSalmon" };
+            string color = "";
+            int cont = 0;
+
             //Get informations from browser
-            //myProxy.On("addNewMessageToPage", message =>
-            //{
-            //    _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            //    {
+            myProxy.On("addNewMessageToPage", message =>
+            {
+                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
 
-            //        messages.Text += message.Name + ": " + message.Message;
+                    username = message.Name;
+                    messages = message.Message;
 
-            //    });
-            //});
-           
+                    if (cont >= backgroundColor.Length)
+                    {
+                        cont = 0;
+                    }
+
+                    color = backgroundColor[cont]; //initialisation to "Yellow"
+
+                    for (int i = 0; i < dataList.Count; i++)
+                    {
+                        if(username == dataList[i].MyUsername)
+                        {
+                            color = dataList[i].MyBackground;
+                            cont--;
+                            break;
+                        }                            
+                    }
+
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
+
+                    cont++;
+
+                });
+            });
+
+            MessagesList.ItemsSource = dataList;
+
         }
+
 
         public  class GetIdGoodUnique
         {
@@ -133,7 +167,19 @@ namespace App1
             string groupId = stockIdGoodUnique.IdGoodUnique;
             await myProxy.Invoke("StopActivity", groupId, myTakingNotes);
 
-        }     
+        }
+
+        private async void DisplayNoWifiDialog(string title, string content)
+        {
+            ContentDialog noWifiDialog = new ContentDialog()
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "Ok"
+            };
+
+            await noWifiDialog.ShowAsync();
+        }
     }
 }
     
