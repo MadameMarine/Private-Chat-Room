@@ -54,10 +54,10 @@ namespace App1
    
             var username = "";
             var messages = "";
+            var participantId = "";
 
             string[] backgroundColor = new string[] { "Gold", "Orange", "LawnGreen", "DeepSkyBlue", "LightPink" };
-            string color = "";
-            int cont = 0;
+            string color = "";          
 
             //Get informations from browser
             myProxy.On("sendingNote", message =>
@@ -67,29 +67,16 @@ namespace App1
 
                     username = message.Name;
                     messages = message.Message;
+                    participantId = message.ParticipantId;
 
-                    //This is a loop of colors
-                    if (cont >= backgroundColor.Length)
-                    {
-                        cont = 0;
-                    }
+                    var lastChar = participantId[participantId.Length - 1];
+                    var lastCharintoNumber = (int)lastChar;
 
-                    color = backgroundColor[cont]; //initialisation to "Yellow"
+                    var cursorColor = lastCharintoNumber % 5;
 
-                    //if an user have already a color 
-                    for (int i = 0; i < dataList.Count; i++)
-                    {
-                        if(username == dataList[i].MyUsername)
-                        {
-                            color = dataList[i].MyBackground;
-                            cont--;
-                            break;
-                        }                            
-                    }
+                    color = backgroundColor[cursorColor];
 
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
-                    
-                    cont++;
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });                   
 
                 });
             });
@@ -99,11 +86,6 @@ namespace App1
 
 
         }
-
-        //public class GetColorbackground
-        //{
-        //    public string ColorBackground { get; set; }
-        //}
 
 
         public  class GetIdGoodUnique
