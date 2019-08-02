@@ -37,6 +37,9 @@ namespace App1
         private string idUnivers = "Monde";
         GetIdGoodUnique stockIdGoodUnique = new GetIdGoodUnique();
 
+        //WIP-----------
+        public List<GroupByUser> UserItem { get; set; }
+
         public MainPage()
         {
             
@@ -76,14 +79,20 @@ namespace App1
 
                     color = backgroundColor[cursorColor];
 
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });                   
+                    //WIP-------------------
+                    var dataUser = new List<UserData>() {
+                        new UserData {MyUsername = username, MyMessage = messages, MyBackground = color },
+                    };
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
+
+                    var myMessageByUser = dataUser.GroupBy(x => x.MyUsername).Select(x => new GroupByUser { MyMessage = x.Key, UserItem = x.ToList() });
+
+                    UserItem = myMessageByUser.ToList();
 
                 });
             });
 
             MessagesList.ItemsSource = dataList;
-
-
 
         }
 

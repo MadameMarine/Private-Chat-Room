@@ -15,9 +15,16 @@
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="375,157,0,0" VerticalAlignment="Top" Height="50" Width="425" IsEnabled="False"/>
         <Button x:Name="ButtonCloseSession" Content="Close" Margin="827,157,0,0" VerticalAlignment="Top" Height="50" Width="100" IsEnabled="False" Click="ButtonCloseSession_Click"/>
         <ItemsControl x:Name="MessagesList" Margin="375,256,50,50">
+            <!--WIP-->
+
+            <CollectionViewSource
+            x:Name="groupedItemsViewSource"
+            Source="{Binding UserData}"
+            IsSourceGrouped="true"
+            ItemsPath="Items"/>
             <ItemsControl.ItemTemplate>
+                
                 <DataTemplate x:DataType="x:String">
-                    <!--wip-->
                         
                         <Grid Width="100" Height="100" Background="{Binding MyBackground}" Margin="8">
                             <StackPanel>
@@ -29,7 +36,6 @@
                             </StackPanel>
                         </Grid>
                         
-                    <!--wip-->
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
