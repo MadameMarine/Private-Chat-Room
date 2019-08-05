@@ -19,11 +19,13 @@
 
             <CollectionViewSource
             x:Name="groupedItemsViewSource"
-            Source="{Binding UserData}"
+            Source="{Binding UserItem}"
             IsSourceGrouped="true"
-            ItemsPath="Items"/>
+            ItemsPath="UserItem"/>
             <ItemsControl.ItemTemplate>
-                
+            
+            <!--WIP-->
+
                 <DataTemplate x:DataType="x:String">
                         
                         <Grid Width="100" Height="100" Background="{Binding MyBackground}" Margin="8">

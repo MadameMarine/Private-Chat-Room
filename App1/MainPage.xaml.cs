@@ -39,13 +39,15 @@ namespace App1
 
         //WIP-----------
         public List<GroupByUser> UserItem { get; set; }
+        public List<UserData> dataUser { get; set; }
+        //WIP-----------
 
         public MainPage()
         {
             
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
-          
+
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -54,7 +56,8 @@ namespace App1
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
             ObservableCollection<UserData> dataList = new ObservableCollection<UserData>();
-   
+            ObservableCollection<UserData> dataUser = new ObservableCollection<UserData>();
+
             var username = "";
             var messages = "";
             var participantId = "";
@@ -79,15 +82,17 @@ namespace App1
 
                     color = backgroundColor[cursorColor];
 
-                    //WIP-------------------
-                    var dataUser = new List<UserData>() {
-                        new UserData {MyUsername = username, MyMessage = messages, MyBackground = color },
-                    };
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
+                    //WIP--------------------------------------
+
+                    dataUser.Add(new UserData() { MyMessage = messages, MyUsername = username, MyBackground = color }); 
+                    
+                    dataList.Add(new UserData() { MyMessage = messages, MyUsername = username, MyBackground = color });
 
                     var myMessageByUser = dataUser.GroupBy(x => x.MyUsername).Select(x => new GroupByUser { MyMessage = x.Key, UserItem = x.ToList() });
 
                     UserItem = myMessageByUser.ToList();
+
+                    //-------------WIP----------------------
 
                 });
             });
@@ -96,8 +101,7 @@ namespace App1
 
         }
 
-
-        public  class GetIdGoodUnique
+        public class GetIdGoodUnique
         {
             public string IdGoodUnique { get; set; }
         }
