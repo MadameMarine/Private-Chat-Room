@@ -8,6 +8,18 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <!--WIP-->
+
+        <CollectionViewSource
+            x:Name="groupedItemsViewSource"
+            Source="{Binding UserItem}"
+            IsSourceGrouped="true"
+            ItemsPath="UserItem"/>
+
+        <!--WIP-->
+    </Page.Resources>
+
     <Grid RenderTransformOrigin="0.455,0.529">
         <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Grid HorizontalAlignment="Left" Height="1000" VerticalAlignment="Center" Width="300"/>
@@ -15,17 +27,8 @@
         <TextBox x:Name="TextUrl" HorizontalAlignment="Left" Margin="375,157,0,0" VerticalAlignment="Top" Height="50" Width="425" IsEnabled="False"/>
         <Button x:Name="ButtonCloseSession" Content="Close" Margin="827,157,0,0" VerticalAlignment="Top" Height="50" Width="100" IsEnabled="False" Click="ButtonCloseSession_Click"/>
         <ItemsControl x:Name="MessagesList" Margin="375,256,50,50">
-            <!--WIP-->
-
-            <CollectionViewSource
-            x:Name="groupedItemsViewSource"
-            Source="{Binding UserItem}"
-            IsSourceGrouped="true"
-            ItemsPath="UserItem"/>
-            <ItemsControl.ItemTemplate>
-            
-            <!--WIP-->
-
+           
+            <!--<ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="x:String">
                         
                         <Grid Width="100" Height="100" Background="{Binding MyBackground}" Margin="8">
@@ -39,7 +42,9 @@
                         </Grid>
                         
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ItemsControl.ItemTemplate>-->
+            
+           <!--WIP-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid Orientation="Horizontal" />

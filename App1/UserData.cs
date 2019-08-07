@@ -14,5 +14,10 @@ namespace App1
 
         public string MyBackground{ get; set; }
 
+        public override string ToString()
+        {
+            return MyUsername;
+        }
+
     }
 }

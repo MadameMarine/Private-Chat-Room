@@ -82,11 +82,11 @@ namespace App1
 
                     color = backgroundColor[cursorColor];
 
-                    //WIP--------------------------------------
-
-                    dataUser.Add(new UserData() { MyMessage = messages, MyUsername = username, MyBackground = color }); 
-                    
                     dataList.Add(new UserData() { MyMessage = messages, MyUsername = username, MyBackground = color });
+
+                    //--------------WIP----------------------
+
+                    dataUser.Add(new UserData() { MyMessage = messages, MyUsername = username, MyBackground = color });
 
                     var myMessageByUser = dataUser.GroupBy(x => x.MyUsername).Select(x => new GroupByUser { MyMessage = x.Key, UserItem = x.ToList() });
 
