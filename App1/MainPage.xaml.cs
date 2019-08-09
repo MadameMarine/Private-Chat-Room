@@ -37,12 +37,13 @@ namespace App1
         private string idUnivers = "Monde";
         GetIdGoodUnique stockIdGoodUnique = new GetIdGoodUnique();
 
+        
         public MainPage()
         {
             
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
-          
+
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -50,45 +51,34 @@ namespace App1
             myHubConnection = new HubConnection(baseUrl);
             myProxy = myHubConnection.CreateHubProxy("chatHub");
 
-            ObservableCollection<UserData> dataList = new ObservableCollection<UserData>();
-   
-            var username = "";
-            var messages = "";
-            var participantId = "";
-
-            string[] backgroundColor = new string[] { "Gold", "Orange", "LawnGreen", "DeepSkyBlue", "LightPink" };
-            string color = "";          
-
             //Get informations from browser
-            myProxy.On("sendingNote", message =>
-            {
-                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
-
-                    username = message.Name;
-                    messages = message.Message;
-                    participantId = message.ParticipantId;
-
-                    var lastChar = participantId[participantId.Length - 1];
-                    var lastCharintoNumber = (int)lastChar;
-
-                    var cursorColor = lastCharintoNumber % 5;
-
-                    color = backgroundColor[cursorColor];
-
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });                   
-
-                });
-            });
-
-            MessagesList.ItemsSource = dataList;
-
-
+            myProxy.On("sendingNote", onNoteReceived);
 
         }
 
+        List<UserMessage> allMessages = new List<UserMessage>();
 
-        public  class GetIdGoodUnique
+        ObservableCollection<UserMessages> allMessagesGrouped = new ObservableCollection<UserMessages>();
+
+        private void onNoteReceived(dynamic message)
+        {
+            string color = getBackgroundColor(message.ParticipantId.ToString());
+
+            allMessages.Add(new UserMessage { MyMessage = message.Message, MyUsername = message.Name, MyBackground = color });
+
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {//modify user interface in UI thread
+                GroupUser.ItemsSource = from x in allMessages
+                                        group x by x.MyUsername into grp
+                                        select grp;
+            });
+        }
+
+        static string[] backgroundColors = new string[] { "Gold", "Orange", "LawnGreen", "DeepSkyBlue", "LightPink" };
+        private static string getBackgroundColor(string participantId)
+            => backgroundColors[(int)participantId[participantId.Length - 1] % 5];
+
+        public class GetIdGoodUnique
         {
             public string IdGoodUnique { get; set; }
         }

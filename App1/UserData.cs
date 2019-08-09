@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace App1
 {
-    class UserData
+    public class UserMessage
     {
         public string MyUsername { get; set; }
 
         public string MyMessage { get; set; }
 
         public string MyBackground{ get; set; }
+
+        public override string ToString()
+        {
+            return MyUsername;
+        }
 
     }
 }
