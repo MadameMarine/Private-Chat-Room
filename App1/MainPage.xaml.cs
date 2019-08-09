@@ -54,6 +54,8 @@ namespace App1
             //Get informations from browser
             myProxy.On("sendingNote", onNoteReceived);
 
+            //cvs.Source = allMessagesGrouped;
+            // GroupUser.ItemsSource = cvs;
         }
 
         List<UserMessage> allMessages = new List<UserMessage>();
