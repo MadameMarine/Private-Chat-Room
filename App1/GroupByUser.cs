@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace App1
 {
-    public class GroupByUser
+    public class UserMessages
     {
 
-        public string MyMessage { get; set; }
-        public List<UserData> UserItem { get; set; }
+        public string Username { get; set; }
+        public ObservableCollection<UserMessage> Messages { get; set; } = new ObservableCollection<UserMessage>();
     }
 }
