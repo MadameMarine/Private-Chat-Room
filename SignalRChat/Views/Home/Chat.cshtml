@@ -64,11 +64,14 @@
             var textBox_UserName = '';
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
+            var listColors = ['Gold', 'Orange', 'LawnGreen', 'DeepSkyBlue', 'LightPink'];
+            var participantId = "";
+            var cursorColor = 0;
 
             //Send Message to App1
             $('#Button_Sendmessage').click(function () {
                 // Call the Send method on the hub.
-                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val());
+                chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), $('#textBox_Message').val(), participantId);
                 // Clear text box and reset focus for next comment.
                 $('#textBox_Message').val('').focus();
             });
@@ -83,11 +86,15 @@
             });
 
             $('#Button_JoinGroup').click(function () {
-                //$('#Button_JoinGroup').prop('disabled', true);
-                //$('#textBox_UserName').prop('disabled', true);
-
+                
                 $('#Button_JoinGroup').hide();
                 $('#textBox_UserName').hide();
+
+                 //color background
+                //Change color text area message according to participantId
+                    $("textarea[type='text']").blur(function(e) {
+                        $(this).css("background", listColors[cursorColor]);
+                    });
 
                 //Display UserName when user join group
                 $('#text_UserNameDisplay').append($('#textBox_UserName').val());
@@ -95,10 +102,10 @@
 
                 //Alert user when joining session
                 //$('text_MessageConnecting').show();
-
-               
+                               
                 chat.server.joinSession('@Model.Id').done(function (session) {
                     console.log('user connected to session  @Model.Id');
+
 
                     //Read data in dictionary
                     var currentActivity = session.CurrentActivity;
@@ -106,8 +113,7 @@
 
                     //User is connected 
                     $('text_MessageConnecting').hide();
-
-
+                  
                     //If currentActivity has changed : display notes
                     if (currentActivity != null && currentActivity != "closed") {
                         handleStartingActivity(currentActivity);
@@ -120,7 +126,7 @@
                     $('#textBox_Message').focus();
                 });            
                
-                //Display in App1 when user is connected
+                //Display in UWP when user is connected
                 //Pas nécessaire pour l'instant car pas de post-it
                 @*chat.server.sendNote('@Model.Id', $('#textBox_UserName').val(), "connected");*@
 
@@ -133,8 +139,8 @@
             chat.client.stoppingActivity = handleStoppingActivity;
 
             // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (message) {
-                console.log( message.Name + ' ' + message.Message);
+            chat.client.sendingNote = function (message) {
+                console.log( message.Name + ' ' + message.Message + 'id user = ' + message.participatId);
                 $('#discussion').append('<li><strong>' + htmlEncode(message.Name) + '</strong>: ' + htmlEncode(message.Message) + '</li>');
             };
 
@@ -143,7 +149,7 @@
                 console.log('startActivity :' + newActivity); 
 
                 if (newActivity == 'TakingNotes') {
-                    //$('#textmessage').show();
+                    
                     $('#textBox_Message').show();
                     $('#Button_Sendmessage').show();
 
@@ -155,7 +161,6 @@
                 console.log('stopping activity = ' + newActivity);
 
                  if (newActivity == 'closed') {
-                    //$('#textmessage').hide();
                     $('#textBox_Message').hide();
                     $('#Button_Sendmessage').hide();
 
@@ -167,6 +172,14 @@
             console.log('Starting signalR connection...');
             $.connection.hub.start().done(function () {
 
+                participantId = $.connection.hub.id;
+                console.log('my connection id is :' + $.connection.hub.id);
+
+                var lastChar = participantId.slice(-1);
+                var lastCharintoNumber = lastChar.charCodeAt(0);
+
+                cursorColor = lastCharintoNumber % 5;
+                
             });
         });
 

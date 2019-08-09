@@ -54,45 +54,36 @@ namespace App1
    
             var username = "";
             var messages = "";
+            var participantId = "";
 
-            string[] backgroundColor = new string[] { "LightYellow", "Coral", "LightGreen" , "LightCyan", "LightSalmon" };
-            string color = "";
-            int cont = 0;
+            string[] backgroundColor = new string[] { "Gold", "Orange", "LawnGreen", "DeepSkyBlue", "LightPink" };
+            string color = "";          
 
             //Get informations from browser
-            myProxy.On("addNewMessageToPage", message =>
+            myProxy.On("sendingNote", message =>
             {
                 _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
 
                     username = message.Name;
                     messages = message.Message;
+                    participantId = message.ParticipantId;
 
-                    if (cont >= backgroundColor.Length)
-                    {
-                        cont = 0;
-                    }
+                    var lastChar = participantId[participantId.Length - 1];
+                    var lastCharintoNumber = (int)lastChar;
 
-                    color = backgroundColor[cont]; //initialisation to "Yellow"
+                    var cursorColor = lastCharintoNumber % 5;
 
-                    for (int i = 0; i < dataList.Count; i++)
-                    {
-                        if(username == dataList[i].MyUsername)
-                        {
-                            color = dataList[i].MyBackground;
-                            cont--;
-                            break;
-                        }                            
-                    }
+                    color = backgroundColor[cursorColor];
 
-                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });
-
-                    cont++;
+                    dataList.Add(new UserData() { MyUsername = username, MyMessage = messages, MyBackground = color });                   
 
                 });
             });
 
             MessagesList.ItemsSource = dataList;
+
+
 
         }
 
@@ -169,17 +160,7 @@ namespace App1
 
         }
 
-        private async void DisplayNoWifiDialog(string title, string content)
-        {
-            ContentDialog noWifiDialog = new ContentDialog()
-            {
-                Title = title,
-                Content = content,
-                CloseButtonText = "Ok"
-            };
-
-            await noWifiDialog.ShowAsync();
-        }
+       
     }
 }
     

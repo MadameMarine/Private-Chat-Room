@@ -78,15 +78,17 @@ namespace SignalRChat
             public string GroupChatId { get; set; }
             public string Name { get; set; }
             public string Message { get; set; }
+
+            public string ParticipantId { get; set; }
         }
 
-        public async Task SendNote(string sessionId, string name, string message)
+        public async Task SendNote(string sessionId, string name, string message, string participantId)
         {
             //Call the addNewMessageToPage method to send message/notes  to compositeur
             var adminConnectionId = SessionService.Instance.GetSession(sessionId).AdminConnectionId;
             var maestroClient = Clients.Client(adminConnectionId);
-            await maestroClient.addNewMessageToPage(new ChatMessage() { Name = name, Message = message });
-
+            await maestroClient.sendingNote(new ChatMessage() { Name = name, Message = message, ParticipantId = participantId });
+           
         }
 
 
@@ -112,8 +114,11 @@ namespace SignalRChat
 
         public Session JoinSession(string sessionId) 
         {
+             
             this.Groups.Add(this.Context.ConnectionId, sessionId);
             return SessionService.Instance.GetSession(sessionId);
+
+            
         }
         
 
@@ -127,8 +132,5 @@ namespace SignalRChat
             this.Groups.Add(this.Context.ConnectionId, res.Id);
             return res;
         }
-
-        
-    
     }
 }
